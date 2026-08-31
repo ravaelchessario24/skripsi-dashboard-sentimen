@@ -557,22 +557,36 @@ elif halaman == "Visualisasi TF-IDF Bigram":
     with col3, st.container(border=True):
         eyebrow("Word Cloud — Positif")
         if freq_pos:
-            wc_pos = WordCloud(width=600, height=340, background_color=None, colormap='Greens').generate_from_frequencies(freq_pos)
-            fig5, ax5 = plt.subplots()
+            wc_pos = WordCloud(
+                width=600, 
+                height=340, 
+                background_color=None, 
+                mode="RGBA", 
+                colormap='Greens'
+            ).generate_from_frequencies(freq_pos)
+            
+            fig5, ax5 = plt.subplots(facecolor='none')
             ax5.imshow(wc_pos, interpolation='bilinear')
             ax5.axis('off')
-            st.pyplot(fig5, use_container_width=True)
+            st.pyplot(fig5, use_container_width=True, transparent=True)
         else:
             st.caption("Data tidak cukup untuk membentuk Bigram Positif.")
 
     with col4, st.container(border=True):
         eyebrow("Word Cloud — Negatif")
         if freq_neg:
-            wc_neg = WordCloud(width=600, height=340, background_color=None, colormap='Reds').generate_from_frequencies(freq_neg)
-            fig6, ax6 = plt.subplots()
+            wc_neg = WordCloud(
+                width=600, 
+                height=340, 
+                background_color=None, 
+                mode="RGBA", 
+                colormap='Reds'
+            ).generate_from_frequencies(freq_neg)
+            
+            fig6, ax6 = plt.subplots(facecolor='none')
             ax6.imshow(wc_neg, interpolation='bilinear')
             ax6.axis('off')
-            st.pyplot(fig6, use_container_width=True)
+            st.pyplot(fig6, use_container_width=True, transparent=True)
         else:
             st.caption("Data tidak cukup untuk membentuk Bigram Negatif.")
 
@@ -905,22 +919,36 @@ elif halaman == "Prediksi Sentimen":
             with c5, st.container(border=True):
                 eyebrow("Word Cloud — Positif")
                 if freq_pos:
-                    wc_pos = WordCloud(width=500, height=300, background_color=None, colormap='Greens').generate_from_frequencies(freq_pos)
-                    figA, axA = plt.subplots(figsize=(5, 3))
+                    wc_pos = WordCloud(
+                        width=500, 
+                        height=300, 
+                        background_color=None, 
+                        mode="RGBA", 
+                        colormap='Greens'
+                    ).generate_from_frequencies(freq_pos)
+                    
+                    figA, axA = plt.subplots(figsize=(5, 3), facecolor='none')
                     axA.imshow(wc_pos, interpolation='bilinear')
                     axA.axis('off')
-                    st.pyplot(figA, use_container_width=True)
+                    st.pyplot(figA, use_container_width=True, transparent=True)
                 else:
                     st.caption("Data tidak cukup untuk membentuk Bigram Positif.")
 
             with c6, st.container(border=True):
                 eyebrow("Word Cloud — Negatif")
                 if freq_neg:
-                    wc_neg = WordCloud(width=500, height=300, background_color=None, colormap='Reds').generate_from_frequencies(freq_neg)
-                    figB, axB = plt.subplots(figsize=(5, 3))
+                    wc_neg = WordCloud(
+                        width=500, 
+                        height=300, 
+                        background_color=None, 
+                        mode="RGBA", 
+                        colormap='Reds'
+                    ).generate_from_frequencies(freq_neg)
+                    
+                    figB, axB = plt.subplots(figsize=(5, 3), facecolor='none')
                     axB.imshow(wc_neg, interpolation='bilinear')
                     axB.axis('off')
-                    st.pyplot(figB, use_container_width=True)
+                    st.pyplot(figB, use_container_width=True, transparent=True)
                 else:
                     st.caption("Data tidak cukup untuk membentuk Bigram Negatif.")
 
