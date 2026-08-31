@@ -57,12 +57,13 @@ st.markdown(f"""
 
 html, body, [class*="css"] {{
     font-family: 'Plus Jakarta Sans', sans-serif;
+    color-scheme: light dark;
 }}
 
 /* Overall canvas: faint tinted background instead of stark white,
    reads more like an institutional portal than a raw app shell. */
 [data-testid="stAppViewContainer"] {{
-    background: linear-gradient(180deg, {GREEN_TINT} 0%, #FFFFFF 320px);
+    background: linear-gradient(180deg, {GREEN_TINT} 0%, var(--background-color) 320px);
 }}
 [data-testid="stHeader"] {{
     background: transparent;
@@ -128,7 +129,7 @@ html, body, [class*="css"] {{
 }}
 
 div[data-testid="stVerticalBlockBorderWrapper"] {{
-    background: #FFFFFF;
+    background: var(--secondary-background-color);
     border-radius: 12px !important;
     border: 1px solid {BORDER} !important;
     box-shadow: 0 1px 2px rgba(0,67,42,0.04), 0 1px 12px rgba(0,67,42,0.03);
@@ -294,8 +295,8 @@ def set_mpl_style():
         "ytick.color": MUTED,
         "axes.spines.top": False,
         "axes.spines.right": False,
-        "figure.facecolor": "white",
-        "axes.facecolor": "white",
+        "figure.facecolor": "none",
+        "axes.facecolor": "none",
     })
 
 set_mpl_style()
@@ -400,7 +401,7 @@ with st.sidebar:
         label_visibility="collapsed",
     )
     st.markdown("---")
-    st.caption("Skripsi Analisis Sentimen Mobile JKN, 2026")
+    st.caption("Analisis Sentimen Mobile JKN, 2026")
 
 # HALAMAN 1 — UTAMA
 
@@ -556,7 +557,7 @@ elif halaman == "Visualisasi TF-IDF Bigram":
     with col3, st.container(border=True):
         eyebrow("Word Cloud — Positif")
         if freq_pos:
-            wc_pos = WordCloud(width=600, height=340, background_color='white', colormap='Greens').generate_from_frequencies(freq_pos)
+            wc_pos = WordCloud(width=600, height=340, background_color=None, colormap='Greens').generate_from_frequencies(freq_pos)
             fig5, ax5 = plt.subplots()
             ax5.imshow(wc_pos, interpolation='bilinear')
             ax5.axis('off')
@@ -567,7 +568,7 @@ elif halaman == "Visualisasi TF-IDF Bigram":
     with col4, st.container(border=True):
         eyebrow("Word Cloud — Negatif")
         if freq_neg:
-            wc_neg = WordCloud(width=600, height=340, background_color='white', colormap='Reds').generate_from_frequencies(freq_neg)
+            wc_neg = WordCloud(width=600, height=340, background_color=None, colormap='Reds').generate_from_frequencies(freq_neg)
             fig6, ax6 = plt.subplots()
             ax6.imshow(wc_neg, interpolation='bilinear')
             ax6.axis('off')
@@ -777,7 +778,7 @@ elif halaman == "Prediksi Sentimen":
                     font-family: 'Plus Jakarta Sans', sans-serif;
                     font-size: 0.95rem;
                     font-weight: 600;
-                    color: #1C2321;
+                    color: var(--text-color);
                     animation: swipeUpText 222s cubic-bezier(0.65, 0, 0.35, 1) forwards;
                 }
                 .carousel-text span {
@@ -849,20 +850,20 @@ elif halaman == "Prediksi Sentimen":
                 st.markdown(
                     f'''
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                        <div style="padding:10px 12px;background:#f5f5f5;border-radius:8px;">
-                            <span style="color:#888;font-size:0.8rem;">True Positive (TP)</span><br>
+                        <div style="padding:10px 12px;background:var(--secondary-background-color);border-radius:8px;">
+                            <span style="color:var(--text-color);font-size:0.8rem;">True Positive (TP)</span><br>
                             <span style="font-size:1.1rem;font-weight:700;">{tp_baru}</span>
                         </div>
-                        <div style="padding:10px 12px;background:#f5f5f5;border-radius:8px;">
-                            <span style="color:#888;font-size:0.8rem;">True Negative (TN)</span><br>
+                        <div style="padding:10px 12px;background:var(--secondary-background-color);border-radius:8px;">
+                            <span style="color:var(--text-color);font-size:0.8rem;">True Negative (TN)</span><br>
                             <span style="font-size:1.1rem;font-weight:700;">{tn_baru}</span>
                         </div>
-                        <div style="padding:10px 12px;background:#f5f5f5;border-radius:8px;">
-                            <span style="color:#888;font-size:0.8rem;">False Positive (FP)</span><br>
+                        <div style="padding:10px 12px;background:var(--secondary-background-color);border-radius:8px;">
+                            <span style="color:var(--text-color);font-size:0.8rem;">False Positive (FP)</span><br>
                             <span style="font-size:1.1rem;font-weight:700;">{fp_baru}</span>
                         </div>
-                        <div style="padding:10px 12px;background:#f5f5f5;border-radius:8px;">
-                            <span style="color:#888;font-size:0.8rem;">False Negative (FN)</span><br>
+                        <div style="padding:10px 12px;background:var(--secondary-background-color);border-radius:8px;">
+                            <span style="color:var(--text-color);font-size:0.8rem;">False Negative (FN)</span><br>
                             <span style="font-size:1.1rem;font-weight:700;">{fn_baru}</span>
                         </div>
                     </div>
@@ -904,7 +905,7 @@ elif halaman == "Prediksi Sentimen":
             with c5, st.container(border=True):
                 eyebrow("Word Cloud — Positif")
                 if freq_pos:
-                    wc_pos = WordCloud(width=500, height=300, background_color='white', colormap='Greens').generate_from_frequencies(freq_pos)
+                    wc_pos = WordCloud(width=500, height=300, background_color=None, colormap='Greens').generate_from_frequencies(freq_pos)
                     figA, axA = plt.subplots(figsize=(5, 3))
                     axA.imshow(wc_pos, interpolation='bilinear')
                     axA.axis('off')
@@ -915,7 +916,7 @@ elif halaman == "Prediksi Sentimen":
             with c6, st.container(border=True):
                 eyebrow("Word Cloud — Negatif")
                 if freq_neg:
-                    wc_neg = WordCloud(width=500, height=300, background_color='white', colormap='Reds').generate_from_frequencies(freq_neg)
+                    wc_neg = WordCloud(width=500, height=300, background_color=None, colormap='Reds').generate_from_frequencies(freq_neg)
                     figB, axB = plt.subplots(figsize=(5, 3))
                     axB.imshow(wc_neg, interpolation='bilinear')
                     axB.axis('off')
