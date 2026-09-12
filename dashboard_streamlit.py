@@ -404,44 +404,56 @@ with st.sidebar:
     st.caption("Analisis Sentimen Mobile JKN, 2026")
 
 # HALAMAN 1 — UTAMA
-
 if halaman == "Halaman Utama":
-    header("Ringkasan")
-
+    header("Ringkasan Eksekutif", subtitle="Insight Sentimen Pengguna Mobile JKN pada Google Play Store Periode Januari 2025 - Januari 2026")
+    
     total_ulasan = len(df)
     total_positif = int((df['label'] == 'Positif').sum())
     total_negatif = int((df['label'] == 'Negatif').sum())
+    
+    pct_positif = (total_positif / total_ulasan) * 100
+    pct_negatif = (total_negatif / total_ulasan) * 100
 
-    eyebrow("Ringkasan Data — Hasil Pelabelan")
+    eyebrow("Sorotan Data Sentimen")
     c1, c2, c3 = st.columns(3)
     with c1, st.container(border=True):
         st.metric("Total Ulasan", f"{total_ulasan:,}".replace(",", "."))
     with c2, st.container(border=True):
-        st.metric("Label Positif", f"{total_positif:,}".replace(",", "."))
+        st.metric("Label Positif", f"{total_positif:,}".replace(",", "."), f"{pct_positif:.1f}% dari total")
     with c3, st.container(border=True):
-        st.metric("Label Negatif", f"{total_negatif:,}".replace(",", "."))
+        st.metric("Label Negatif", f"{total_negatif:,}".replace(",", "."), f"{pct_negatif:.1f}% dari total", delta_color="inverse")
 
-    eyebrow("Performa Model — Data Training")
-    c4, c5, c6, c7 = st.columns(4)
-    with c4, st.container(border=True):
-        st.metric("Akurasi", f"{eval_hasil['akurasi_train']*100:.2f}%")
-    with c5, st.container(border=True):
-        st.metric("Presisi", f"{eval_hasil['presisi_train']*100:.2f}%")
-    with c6, st.container(border=True):
-        st.metric("Recall", f"{eval_hasil['recall_train']*100:.2f}%")
-    with c7, st.container(border=True):
-        st.metric("F1-Score", f"{eval_hasil['f1_train']*100:.2f}%")
+    st.markdown("<br>", unsafe_allow_html=True)
+    eyebrow("Proporsi & Distribusi Sentimen")
+    col_chart1, col_chart2 = st.columns(2)
+    
+    with col_chart1, st.container(border=True):
+        label_counts = df['label'].value_counts()
+        colors = [MPL_PALETTE.get(lbl, MUTED) for lbl in label_counts.index]
+        fig1, ax1 = plt.subplots(figsize=(5, 4.2))
+        wedges, texts, autotexts = ax1.pie(
+            label_counts, labels=label_counts.index, autopct='%1.1f%%',
+            colors=colors, startangle=90,
+            wedgeprops={"edgecolor": "white", "linewidth": 2},
+            textprops={"fontsize": 10},
+        )
+        for at in autotexts:
+            at.set_color("white")
+            at.set_fontweight("bold")
+        ax1.axis('equal')
+        st.pyplot(fig1, use_container_width=True)
 
-    eyebrow("Performa Model — Data Testing")
-    c8, c9, c10, c11 = st.columns(4)
-    with c8, st.container(border=True):
-        st.metric("Akurasi", f"{eval_hasil['akurasi']*100:.2f}%")
-    with c9, st.container(border=True):
-        st.metric("Presisi", f"{eval_hasil['presisi']*100:.2f}%")
-    with c10, st.container(border=True):
-        st.metric("Recall", f"{eval_hasil['recall']*100:.2f}%")
-    with c11, st.container(border=True):
-        st.metric("F1-Score", f"{eval_hasil['f1']*100:.2f}%")
+    with col_chart2, st.container(border=True):
+        fig2, ax2 = plt.subplots(figsize=(5, 4.2))
+        bars = ax2.bar(label_counts.index, label_counts.values,
+                        color=[MPL_PALETTE.get(lbl, MUTED) for lbl in label_counts.index],
+                        width=0.5)
+        ax2.set_ylabel("Jumlah Ulasan")
+        ax2.bar_label(bars, fmt='{:,.0f}', padding=4, fontsize=9)
+        ax2.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f"{int(x):,}".replace(",", ".")))
+        ax2.grid(axis="y", color=BORDER, linewidth=0.8)
+        ax2.set_axisbelow(True)
+        st.pyplot(fig2, use_container_width=True)
         
 # HALAMAN 2 — VISUALISASI DATASET
 
