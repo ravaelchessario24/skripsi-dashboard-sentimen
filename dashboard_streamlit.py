@@ -279,6 +279,116 @@ div[data-testid="stDataFrame"] {{
     border-radius: 8px;
     overflow: hidden;
 }}
+
+/* ===== Halaman Utama — modern KPI layout ===== */
+.kpi-card {{
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}}
+.kpi-icon {{
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}}
+.kpi-icon svg {{
+    width: 22px;
+    height: 22px;
+}}
+.kpi-icon.blue {{ background: #E8EAFB; color: {BLUE_BPJS}; }}
+.kpi-icon.green {{ background: {GREEN_LIGHT}; color: {GREEN_DARK}; }}
+.kpi-icon.red {{ background: {RED_LIGHT}; color: {RED}; }}
+.kpi-text .kpi-label {{
+    font-size: 0.8rem;
+    color: {MUTED};
+    font-weight: 600;
+    margin-bottom: 2px;
+}}
+.kpi-text .kpi-value {{
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: {INK};
+    line-height: 1.15;
+}}
+.kpi-badge {{
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.14rem 0.55rem;
+    border-radius: 999px;
+}}
+.kpi-badge.pos {{ background: {GREEN_LIGHT}; color: {GREEN_DARK}; }}
+.kpi-badge.neg {{ background: {RED_LIGHT}; color: {RED}; }}
+
+.ratio-bar {{
+    display: flex;
+    width: 100%;
+    height: 14px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: {BORDER};
+}}
+.ratio-seg-pos {{ background: {GREEN}; height: 100%; }}
+.ratio-seg-neg {{ background: {RED}; height: 100%; }}
+.ratio-labels {{
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 0.6rem;
+}}
+.ratio-labels .pos {{ color: {GREEN_DARK}; }}
+.ratio-labels .neg {{ color: {RED}; }}
+
+.perf-card-title {{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}}
+.perf-card-title .name {{
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: {INK};
+}}
+.perf-card-title .chip {{
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.65rem;
+    border-radius: 999px;
+}}
+.perf-card-title .chip.train {{ background: #E8EAFB; color: {BLUE_BPJS}; }}
+.perf-card-title .chip.test {{ background: {GREEN_LIGHT}; color: {GREEN_DARK}; }}
+
+.metric-row {{ margin-bottom: 0.9rem; }}
+.metric-row:last-child {{ margin-bottom: 0; }}
+.metric-row .top {{
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 0.35rem;
+}}
+.metric-row .top .m-label {{ color: {MUTED}; font-weight: 600; }}
+.metric-row .top .m-value {{ color: {INK}; font-weight: 800; }}
+.metric-row .bar-track {{
+    background: {BORDER};
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+}}
+.metric-row .bar-fill {{
+    height: 100%;
+    border-radius: 999px;
+    background: {GREEN};
+}}
+.metric-row.test .bar-fill {{ background: {BLUE_BPJS}; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -327,6 +437,37 @@ def header(kicker="Analisis Sentimen", subtitle="Ulasan pengguna aplikasi Mobile
 
 def eyebrow(text):
     st.markdown(f'<div class="section-eyebrow">{text}</div>', unsafe_allow_html=True)
+
+# Ikon garis sederhana (stroke="currentColor") dipakai di kartu KPI Halaman Utama
+ICONS = {
+    "doc": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h6M9.5 16h6"/></svg>',
+    "thumb_up": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v11H4V10h3z"/><path d="M7 10l4-7c1 0 2 1 2 2v4h5a2 2 0 0 1 2 2l-1.5 7a2 2 0 0 1-2 1.5H9"/></svg>',
+    "thumb_down": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 14V3H4v11h3z"/><path d="M7 14l4 7c1 0 2-1 2-2v-4h5a2 2 0 0 0 2-2l-1.5-7A2 2 0 0 0 16.5 4H9"/></svg>',
+}
+
+def kpi_card(icon_key, color_class, label, value, badge_html=""):
+    st.markdown(f"""
+    <div class="kpi-card">
+        <div class="kpi-icon {color_class}">{ICONS[icon_key]}</div>
+        <div class="kpi-text">
+            <div class="kpi-label">{label}</div>
+            <div class="kpi-value">{value}</div>
+            {badge_html}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+def metric_bar_row(label, value_pct, variant=""):
+    row_class = f"metric-row {variant}".strip()
+    st.markdown(f"""
+    <div class="{row_class}">
+        <div class="top">
+            <span class="m-label">{label}</span>
+            <span class="m-value">{value_pct:.2f}%</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:{min(value_pct, 100):.2f}%;"></div></div>
+    </div>
+    """, unsafe_allow_html=True)
 
 @st.cache_resource
 def load_model_dan_vectorizer():
@@ -411,38 +552,96 @@ if halaman == "Halaman Utama":
     total_ulasan = len(df)
     total_positif = int((df['label'] == 'Positif').sum())
     total_negatif = int((df['label'] == 'Negatif').sum())
+    pct_positif = (total_positif / total_ulasan * 100) if total_ulasan else 0
+    pct_negatif = (total_negatif / total_ulasan * 100) if total_ulasan else 0
 
+    # --- Ringkasan data: kartu KPI berikon ---
     eyebrow("Ringkasan Data — Hasil Pelabelan")
     c1, c2, c3 = st.columns(3)
     with c1, st.container(border=True):
-        st.metric("Total Ulasan", f"{total_ulasan:,}".replace(",", "."))
+        kpi_card("doc", "blue", "Total Ulasan", f"{total_ulasan:,}".replace(",", "."))
     with c2, st.container(border=True):
-        st.metric("Label Positif", f"{total_positif:,}".replace(",", "."))
+        kpi_card("thumb_up", "green", "Label Positif", f"{total_positif:,}".replace(",", "."),
+                  f'<span class="kpi-badge pos">{pct_positif:.1f}% dari total</span>')
     with c3, st.container(border=True):
-        st.metric("Label Negatif", f"{total_negatif:,}".replace(",", "."))
+        kpi_card("thumb_down", "red", "Label Negatif", f"{total_negatif:,}".replace(",", "."),
+                  f'<span class="kpi-badge neg">{pct_negatif:.1f}% dari total</span>')
 
-    eyebrow("Performa Model — Data Training")
-    c4, c5, c6, c7 = st.columns(4)
-    with c4, st.container(border=True):
-        st.metric("Akurasi", f"{eval_hasil['akurasi_train']*100:.2f}%")
-    with c5, st.container(border=True):
-        st.metric("Presisi", f"{eval_hasil['presisi_train']*100:.2f}%")
-    with c6, st.container(border=True):
-        st.metric("Recall", f"{eval_hasil['recall_train']*100:.2f}%")
-    with c7, st.container(border=True):
-        st.metric("F1-Score", f"{eval_hasil['f1_train']*100:.2f}%")
+    # --- Rasio sentimen: stacked bar Positif vs Negatif ---
+    with st.container(border=True):
+        eyebrow("Rasio Sentimen")
+        st.markdown(
+            f"""
+            <div class="ratio-bar">
+                <div class="ratio-seg-pos" style="width:{pct_positif:.2f}%;"></div>
+                <div class="ratio-seg-neg" style="width:{pct_negatif:.2f}%;"></div>
+            </div>
+            <div class="ratio-labels">
+                <span class="pos">● Positif — {pct_positif:.1f}%</span>
+                <span class="neg">● Negatif — {pct_negatif:.1f}%</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    eyebrow("Performa Model — Data Testing")
-    c8, c9, c10, c11 = st.columns(4)
-    with c8, st.container(border=True):
-        st.metric("Akurasi", f"{eval_hasil['akurasi']*100:.2f}%")
-    with c9, st.container(border=True):
-        st.metric("Presisi", f"{eval_hasil['presisi']*100:.2f}%")
-    with c10, st.container(border=True):
-        st.metric("Recall", f"{eval_hasil['recall']*100:.2f}%")
-    with c11, st.container(border=True):
-        st.metric("F1-Score", f"{eval_hasil['f1']*100:.2f}%")
-        
+    # --- Performa model: kartu Training & Testing berdampingan ---
+    eyebrow("Performa Model")
+    p1, p2 = st.columns(2)
+    with p1, st.container(border=True):
+        st.markdown(
+            """
+            <div class="perf-card-title">
+                <span class="name">Data Training</span>
+                <span class="chip train">Training</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        metric_bar_row("Akurasi", eval_hasil['akurasi_train'] * 100)
+        metric_bar_row("Presisi", eval_hasil['presisi_train'] * 100)
+        metric_bar_row("Recall", eval_hasil['recall_train'] * 100)
+        metric_bar_row("F1-Score", eval_hasil['f1_train'] * 100)
+    with p2, st.container(border=True):
+        st.markdown(
+            """
+            <div class="perf-card-title">
+                <span class="name">Data Testing</span>
+                <span class="chip test">Testing</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        metric_bar_row("Akurasi", eval_hasil['akurasi'] * 100, variant="test")
+        metric_bar_row("Presisi", eval_hasil['presisi'] * 100, variant="test")
+        metric_bar_row("Recall", eval_hasil['recall'] * 100, variant="test")
+        metric_bar_row("F1-Score", eval_hasil['f1'] * 100, variant="test")
+
+    # --- Grafik perbandingan Training vs Testing ---
+    with st.container(border=True):
+        eyebrow("Perbandingan Metrik — Training vs Testing")
+        metrik_labels = ["Akurasi", "Presisi", "Recall", "F1-Score"]
+        train_vals = [eval_hasil['akurasi_train'], eval_hasil['presisi_train'],
+                      eval_hasil['recall_train'], eval_hasil['f1_train']]
+        test_vals = [eval_hasil['akurasi'], eval_hasil['presisi'],
+                     eval_hasil['recall'], eval_hasil['f1']]
+        x = np.arange(len(metrik_labels))
+        width = 0.32
+        fig_cmp, ax_cmp = plt.subplots(figsize=(9.5, 3.6))
+        bars_train = ax_cmp.bar(x - width / 2, [v * 100 for v in train_vals], width,
+                                 label='Training', color=BLUE_BPJS)
+        bars_test = ax_cmp.bar(x + width / 2, [v * 100 for v in test_vals], width,
+                                label='Testing', color=GREEN)
+        ax_cmp.set_xticks(x)
+        ax_cmp.set_xticklabels(metrik_labels)
+        ax_cmp.set_ylabel("Persentase (%)")
+        ax_cmp.set_ylim(0, 112)
+        ax_cmp.bar_label(bars_train, fmt='%.2f', padding=3, fontsize=8)
+        ax_cmp.bar_label(bars_test, fmt='%.2f', padding=3, fontsize=8)
+        ax_cmp.legend(loc='upper center', bbox_to_anchor=(0.5, 1.12), ncol=2, frameon=False)
+        ax_cmp.grid(axis="y", color=BORDER, linewidth=0.8)
+        ax_cmp.set_axisbelow(True)
+        st.pyplot(fig_cmp, use_container_width=True)
+
 # HALAMAN 2 — VISUALISASI DATASET
 
 elif halaman == "Visualisasi Dataset":
