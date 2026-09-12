@@ -530,7 +530,7 @@ with st.sidebar:
     halaman = st.radio(
         "Navigasi",
         ["Halaman Utama", "Visualisasi Dataset", "Visualisasi TF-IDF Bigram",
-         "Evaluasi Model", "Insight Bisnis", "Prediksi Sentimen"],
+         "Evaluasi Model", "Prediksi Sentimen"],
         label_visibility="collapsed",
     )
     st.markdown("---")
