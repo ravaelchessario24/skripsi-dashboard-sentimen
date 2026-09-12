@@ -897,76 +897,7 @@ elif halaman == "Evaluasi Model":
     with c6, st.container(border=True):
         st.metric("F1-Score", f"{eval_hasil['f1']*100:.2f}%")
 
-# HALAMAN 5 — INSIGHT BISNIS
-elif halaman == "Insight Bisnis":
-    header("Insight Bisnis", subtitle="Ringkasan temuan dan rekomendasi berdasarkan hasil analisis sentimen")
-
-    tren_ib, df_tanggal_ib = hitung_tren_bulanan(df)
-
-    eyebrow("Ringkasan Eksekutif")
-    rekomendasi = []
-
-    if not tren_ib.empty:
-        bulan_terburuk = tren_ib['Negatif'].idxmax()
-        jumlah_neg_terburuk = int(tren_ib.loc[bulan_terburuk, 'Negatif'])
-        total_bulan_terburuk = int(tren_ib.loc[bulan_terburuk].sum())
-        pct_neg_terburuk = jumlah_neg_terburuk / total_bulan_terburuk * 100
-        rekomendasi.append((
-            "warn",
-            f"Bulan dengan ulasan negatif terbanyak: {bulan_terburuk.strftime('%B %Y')} "
-            f"({jumlah_neg_terburuk:,} ulasan negatif, {pct_neg_terburuk:.1f}% dari total ulasan bulan itu). "
-            "Disarankan menelusuri log/insiden sistem pada periode tersebut.".replace(",", ".")
-        ))
-
-    freq_neg_all = get_bigram_freq(df.loc[df['label'] == 'Negatif', 'teks_bersih'])
-    freq_pos_all = get_bigram_freq(df.loc[df['label'] == 'Positif', 'teks_bersih'])
-
-    if freq_neg_all:
-        top3_neg = sorted(freq_neg_all.items(), key=lambda x: x[1], reverse=True)[:3]
-        daftar_neg = ", ".join([f"'{b}'" for b, _ in top3_neg])
-        rekomendasi.append((
-            "warn",
-            f"Frasa yang paling sering muncul pada ulasan negatif: {daftar_neg}. "
-            "Prioritaskan perbaikan pada area terkait frasa tersebut."
-        ))
-
-    if freq_pos_all:
-        top3_pos = sorted(freq_pos_all.items(), key=lambda x: x[1], reverse=True)[:3]
-        daftar_pos = ", ".join([f"'{b}'" for b, _ in top3_pos])
-        rekomendasi.append((
-            "ok",
-            f"Frasa yang paling sering muncul pada ulasan positif: {daftar_pos}. "
-            "Aspek ini bisa dipertahankan dan dikomunikasikan sebagai kekuatan aplikasi."
-        ))
-
-    rekomendasi.append((
-        "ok",
-        f"Model klasifikasi mencapai akurasi {eval_hasil['akurasi']*100:.2f}% dan F1-Score "
-        f"{eval_hasil['f1']*100:.2f}% pada data testing, cukup andal untuk memantau sentimen secara berkelanjutan."
-    ))
-
-    for tipe, teks in rekomendasi:
-        kelas_css = "insight-card" if tipe == "ok" else "insight-card warn"
-        st.markdown(f'<div class="{kelas_css}">{teks}</div>', unsafe_allow_html=True)
-
-    if not tren_ib.empty and tren_ib.shape[0] >= 2:
-        eyebrow("Tren Proporsi Positif per Bulan")
-        proporsi_positif = tren_ib['Positif'] / (tren_ib['Positif'] + tren_ib['Negatif']) * 100
-        with st.container(border=True):
-            fig_ib, ax_ib = plt.subplots(figsize=(9, 3.2))
-            x_labels_ib = [p.strftime('%b %y') for p in proporsi_positif.index]
-            ax_ib.plot(x_labels_ib, proporsi_positif.values, marker='o', color=GREEN, linewidth=2.2)
-            ax_ib.axhline(50, color=BORDER, linewidth=1, linestyle='--')
-            ax_ib.set_ylabel("% Ulasan Positif")
-            ax_ib.set_ylim(0, 100)
-            ax_ib.grid(axis="y", color=BORDER, linewidth=0.8)
-            ax_ib.set_axisbelow(True)
-            plt.xticks(rotation=40, ha='right', fontsize=8)
-            fig_ib.tight_layout()
-            st.pyplot(fig_ib, use_container_width=True)
-            st.caption("Garis putus-putus menandai batas 50% — di atas garis berarti sentimen positif lebih dominan pada bulan tersebut.")
-
-# HALAMAN 6 — PREDIKSI SENTIMEN
+# HALAMAN 5 — PREDIKSI SENTIMEN
 elif halaman == "Prediksi Sentimen":
     header("Prediksi & Auto-Labeling", subtitle="Unggah kumpulan ulasan baru untuk diprediksi sentimennya secara otomatis")
     if 'df_hasil_prediksi' not in st.session_state:
