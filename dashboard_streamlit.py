@@ -54,12 +54,10 @@ BORDER = "#DCE6E0"
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:wght@600;700&display=swap');
-
 html, body, [class*="css"] {{
     font-family: 'Plus Jakarta Sans', sans-serif;
     color-scheme: light dark;
 }}
-
 /* Overall canvas: faint tinted background instead of stark white,
    reads more like an institutional portal than a raw app shell. */
 [data-testid="stAppViewContainer"] {{
@@ -72,7 +70,6 @@ html, body, [class*="css"] {{
     padding-top: 1.6rem;
     max-width: 1200px;
 }}
-
 .app-header {{
     padding: 0 0 1.1rem 0;
     border-bottom: 2px solid {GREEN};
@@ -105,7 +102,6 @@ html, body, [class*="css"] {{
     padding: 0.28rem 0.85rem;
     white-space: nowrap;
 }}
-
 .section-eyebrow {{
     display: flex;
     align-items: center;
@@ -127,7 +123,6 @@ html, body, [class*="css"] {{
     border-radius: 2px;
     display: inline-block;
 }}
-
 div[data-testid="stVerticalBlockBorderWrapper"] {{
     background: var(--secondary-background-color);
     border-radius: 12px !important;
@@ -137,7 +132,6 @@ div[data-testid="stVerticalBlockBorderWrapper"] {{
 div[data-testid="stVerticalBlockBorderWrapper"] > div {{
     padding: 1.35rem 1.4rem 1.1rem 1.4rem;
 }}
-
 div[data-testid="stMetric"] {{
     background: transparent;
 }}
@@ -152,7 +146,6 @@ div[data-testid="stMetricValue"] {{
     font-weight: 800;
     font-size: 2.05rem;
 }}
-
 /* Bigger, hero-style metrics reserved for the home page */
 .home-metric div[data-testid="stMetricValue"] {{
     font-size: 2.6rem;
@@ -160,7 +153,6 @@ div[data-testid="stMetricValue"] {{
 .home-metric div[data-testid="stVerticalBlockBorderWrapper"] > div {{
     padding: 1.7rem 1.5rem 1.4rem 1.5rem;
 }}
-
 /* Card title text (used above pyplot / dataframe blocks) */
 .card-title {{
     font-weight: 700;
@@ -168,7 +160,6 @@ div[data-testid="stMetricValue"] {{
     color: {INK};
     margin-bottom: 0.5rem;
 }}
-
 .pill-positif {{
     background: {GREEN_LIGHT};
     border: 1px solid {GREEN};
@@ -189,7 +180,55 @@ div[data-testid="stMetricValue"] {{
     font-size: 1.15rem;
     text-align: center;
 }}
-
+/* ===== Tambahan khusus Halaman Utama ===== */
+.hero-total {{
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+}}
+.hero-total .num {{
+    font-family: 'Lora', serif;
+    font-weight: 700;
+    font-size: 3rem;
+    color: {GREEN};
+    line-height: 1;
+}}
+.hero-total .label {{
+    color: {MUTED};
+    font-size: 0.85rem;
+    font-weight: 600;
+}}
+.stacked-bar {{
+    display: flex;
+    width: 100%;
+    height: 14px;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 0.9rem 0 0.6rem 0;
+    background: {BORDER};
+}}
+.stacked-bar .seg-pos {{ background: {GREEN}; }}
+.stacked-bar .seg-neg {{ background: {RED}; }}
+.stacked-legend {{
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    font-weight: 600;
+}}
+.stacked-legend .l-pos {{ color: {GREEN_DARK}; }}
+.stacked-legend .l-neg {{ color: {RED}; }}
+.gap-chip {{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+}}
+.gap-chip.ok {{ background: {GREEN_LIGHT}; color: {GREEN_DARK}; border: 1px solid {GREEN}; }}
+.gap-chip.warn {{ background: {RED_LIGHT}; color: {RED}; border: 1px solid {RED}; }}
+/* ===== end tambahan ===== */
 section[data-testid="stSidebar"] {{
     background: linear-gradient(180deg, {GREEN_DARK} 0%, {GREEN_DARK} 100%);
     border-right: none;
@@ -225,7 +264,6 @@ section[data-testid="stSidebar"] .sidebar-nav-label {{
     color: rgba(255,255,255,0.55);
     margin: 0 0 0.5rem 0.1rem;
 }}
-
 /* Radio nav items styled as sidebar buttons */
 section[data-testid="stSidebar"] div[role="radiogroup"] {{
     gap: 0.15rem;
@@ -250,7 +288,6 @@ section[data-testid="stSidebar"] hr {{
 section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {{
     color: rgba(255,255,255,0.55) !important;
 }}
-
 div.stButton > button {{
     background: {GREEN};
     color: white;
@@ -263,7 +300,6 @@ div.stButton > button:hover {{
     background: {GREEN_DARK};
     color: white;
 }}
-
 /* Text area border tint */
 div[data-testid="stTextArea"] textarea {{
     border-color: {BORDER} !important;
@@ -272,7 +308,6 @@ div[data-testid="stTextArea"] textarea:focus {{
     border-color: {GREEN} !important;
     box-shadow: 0 0 0 1px {GREEN} !important;
 }}
-
 /* Dataframe header tint */
 div[data-testid="stDataFrame"] {{
     border: 1px solid {BORDER};
@@ -283,7 +318,6 @@ div[data-testid="stDataFrame"] {{
 """, unsafe_allow_html=True)
 
 MPL_PALETTE = {"Positif": GREEN, "Negatif": RED}
-
 
 def set_mpl_style():
     plt.rcParams.update({
@@ -298,7 +332,6 @@ def set_mpl_style():
         "figure.facecolor": "none",
         "axes.facecolor": "none",
     })
-
 set_mpl_style()
 
 def header(kicker="Analisis Sentimen", subtitle="Ulasan pengguna aplikasi Mobile JKN pada Google Play Store Periode Januari 2025 - Januari 2026"):
@@ -308,7 +341,6 @@ def header(kicker="Analisis Sentimen", subtitle="Ulasan pengguna aplikasi Mobile
         img_html = f'<img src="data:image/png;base64,{encoded_image}" style="height: 45px; width: auto; object-fit: contain;">'
     except:
         img_html = ''
-
     st.markdown(
         f"""
         <div style="text-align: left; margin-bottom: 10px;">
@@ -334,12 +366,10 @@ def load_model_dan_vectorizer():
     vectorizer = joblib.load('tfidf_vectorizer.pkl')
     return model, vectorizer
 
-
 @st.cache_data
 def load_dataset():
     df = pd.read_excel('df_labeled.xlsx')
     return df
-
 
 @st.cache_data
 def hitung_evaluasi(_model, _vectorizer, df):
@@ -348,21 +378,18 @@ def hitung_evaluasi(_model, _vectorizer, df):
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
     )
-
     y_pred_test = _model.predict(X_test)
     akurasi = accuracy_score(y_test, y_pred_test)
     presisi = precision_score(y_test, y_pred_test, pos_label='Positif')
     recall = recall_score(y_test, y_pred_test, pos_label='Positif')
     f1 = f1_score(y_test, y_pred_test, pos_label='Positif')
     cm = confusion_matrix(y_test, y_pred_test, labels=['Negatif', 'Positif'])
-
     y_pred_train = _model.predict(X_train)
     akurasi_train = accuracy_score(y_train, y_pred_train)
     presisi_train = precision_score(y_train, y_pred_train, pos_label='Positif')
     recall_train = recall_score(y_train, y_pred_train, pos_label='Positif')
     f1_train = f1_score(y_train, y_pred_train, pos_label='Positif')
     cm_train = confusion_matrix(y_train, y_pred_train, labels=['Negatif', 'Positif'])
-
     return {
         'akurasi': akurasi, 'presisi': presisi, 'recall': recall, 'f1': f1, 'cm': cm,
         'akurasi_train': akurasi_train, 'presisi_train': presisi_train,
@@ -381,7 +408,6 @@ with st.sidebar:
         logo_bpjs_putih_html = f'<img src="data:image/png;base64,{logo_bpjs_putih_b64}" style="height: 80px; width: auto; margin-bottom: 12px;">'
     except:
         logo_bpjs_putih_html = ''
-
     st.markdown(
         f"""
         <div class="sidebar-brand">
@@ -405,63 +431,107 @@ with st.sidebar:
 
 # HALAMAN 1 — UTAMA
 if halaman == "Halaman Utama":
-    header("Ringkasan Eksekutif", subtitle="Insight Sentimen Pengguna Mobile JKN pada Google Play Store Periode Januari 2025 - Januari 2026")
-    
+    header("Ringkasan")
+
     total_ulasan = len(df)
     total_positif = int((df['label'] == 'Positif').sum())
     total_negatif = int((df['label'] == 'Negatif').sum())
-    
-    pct_positif = (total_positif / total_ulasan) * 100
-    pct_negatif = (total_negatif / total_ulasan) * 100
+    pct_pos_home = total_positif / total_ulasan * 100
+    pct_neg_home = total_negatif / total_ulasan * 100
 
-    eyebrow("Sorotan Data Sentimen")
-    c1, c2, c3 = st.columns(3)
-    with c1, st.container(border=True):
-        st.metric("Total Ulasan", f"{total_ulasan:,}".replace(",", "."))
-    with c2, st.container(border=True):
-        st.metric("Label Positif", f"{total_positif:,}".replace(",", "."), f"{pct_positif:.1f}% dari total")
-    with c3, st.container(border=True):
-        st.metric("Label Negatif", f"{total_negatif:,}".replace(",", "."), f"{pct_negatif:.1f}% dari total", delta_color="inverse")
+    # ---------- HERO: Total ulasan + komposisi ----------
+    eyebrow("Ringkasan Data — Hasil Pelabelan")
+    col_hero, col_kpi = st.columns([1.3, 2])
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    eyebrow("Proporsi & Distribusi Sentimen")
-    col_chart1, col_chart2 = st.columns(2)
-    
-    with col_chart1, st.container(border=True):
-        label_counts = df['label'].value_counts()
-        colors = [MPL_PALETTE.get(lbl, MUTED) for lbl in label_counts.index]
-        fig1, ax1 = plt.subplots(figsize=(5, 4.2))
-        wedges, texts, autotexts = ax1.pie(
-            label_counts, labels=label_counts.index, autopct='%1.1f%%',
-            colors=colors, startangle=90,
-            wedgeprops={"edgecolor": "white", "linewidth": 2},
-            textprops={"fontsize": 10},
+    with col_hero, st.container(border=True):
+        st.markdown(
+            f"""
+            <div class="hero-total">
+                <span class="num">{total_ulasan:,}</span>
+            </div>
+            <div class="label" style="margin-top:2px;">Total Ulasan Dianalisis</div>
+            <div class="stacked-bar">
+                <div class="seg-pos" style="width:{pct_pos_home:.2f}%;"></div>
+                <div class="seg-neg" style="width:{pct_neg_home:.2f}%;"></div>
+            </div>
+            <div class="stacked-legend">
+                <span class="l-pos">● Positif {pct_pos_home:.1f}%</span>
+                <span class="l-neg">● Negatif {pct_neg_home:.1f}%</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
-        for at in autotexts:
-            at.set_color("white")
-            at.set_fontweight("bold")
-        ax1.axis('equal')
-        st.pyplot(fig1, use_container_width=True)
 
-    with col_chart2, st.container(border=True):
-        fig2, ax2 = plt.subplots(figsize=(5, 4.2))
-        bars = ax2.bar(label_counts.index, label_counts.values,
-                        color=[MPL_PALETTE.get(lbl, MUTED) for lbl in label_counts.index],
-                        width=0.5)
-        ax2.set_ylabel("Jumlah Ulasan")
-        ax2.bar_label(bars, fmt='{:,.0f}', padding=4, fontsize=9)
-        ax2.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f"{int(x):,}".replace(",", ".")))
-        ax2.grid(axis="y", color=BORDER, linewidth=0.8)
-        ax2.set_axisbelow(True)
-        st.pyplot(fig2, use_container_width=True)
-        
+    with col_kpi:
+        k1, k2 = st.columns(2)
+        with k1, st.container(border=True):
+            st.metric("Label Positif", f"{total_positif:,}".replace(",", "."),
+                       f"{pct_pos_home:.1f}% dari total")
+        with k2, st.container(border=True):
+            st.metric("Label Negatif", f"{total_negatif:,}".replace(",", "."),
+                       f"{pct_neg_home:.1f}% dari total")
+
+        n_train, n_test = eval_hasil['n_train'], eval_hasil['n_test']
+        total_split = n_train + n_test
+        k3, k4 = st.columns(2)
+        with k3, st.container(border=True):
+            st.metric("Data Training", f"{n_train:,}".replace(",", "."),
+                       f"{n_train/total_split*100:.0f}% split")
+        with k4, st.container(border=True):
+            st.metric("Data Testing", f"{n_test:,}".replace(",", "."),
+                       f"{n_test/total_split*100:.0f}% split")
+
+    # ---------- PERFORMA MODEL: Training vs Testing ----------
+    eyebrow("Performa Model — Training vs Testing")
+
+    gap_akurasi = (eval_hasil['akurasi_train'] - eval_hasil['akurasi']) * 100
+    chip_class = "ok" if abs(gap_akurasi) <= 5 else "warn"
+    chip_text = "Gap wajar, model stabil" if chip_class == "ok" else "Gap cukup besar, indikasi overfitting"
+
+    col_chart, col_table = st.columns([1.6, 1])
+
+    with col_chart, st.container(border=True):
+        metrik_labels = ["Akurasi", "Presisi", "Recall", "F1-Score"]
+        train_vals = [eval_hasil['akurasi_train'], eval_hasil['presisi_train'],
+                      eval_hasil['recall_train'], eval_hasil['f1_train']]
+        test_vals = [eval_hasil['akurasi'], eval_hasil['presisi'],
+                     eval_hasil['recall'], eval_hasil['f1']]
+        train_vals = [v * 100 for v in train_vals]
+        test_vals = [v * 100 for v in test_vals]
+
+        x = np.arange(len(metrik_labels))
+        width = 0.32
+        fig_home, ax_home = plt.subplots(figsize=(7, 4))
+        bars_train = ax_home.bar(x - width/2, train_vals, width, label="Training", color=BLUE_BPJS)
+        bars_test = ax_home.bar(x + width/2, test_vals, width, label="Testing", color=GREEN)
+        ax_home.bar_label(bars_train, fmt='%.1f%%', padding=3, fontsize=8.5)
+        ax_home.bar_label(bars_test, fmt='%.1f%%', padding=3, fontsize=8.5)
+        ax_home.set_xticks(x)
+        ax_home.set_xticklabels(metrik_labels)
+        ax_home.set_ylim(0, 110)
+        ax_home.set_ylabel("Skor (%)")
+        ax_home.grid(axis="y", color=BORDER, linewidth=0.8)
+        ax_home.set_axisbelow(True)
+        ax_home.legend(frameon=False, ncol=2, loc="upper center", bbox_to_anchor=(0.5, 1.15))
+        st.pyplot(fig_home, use_container_width=True)
+
+    with col_table, st.container(border=True):
+        st.markdown('<div class="card-title">Ringkasan Angka</div>', unsafe_allow_html=True)
+        tabel_metrik = pd.DataFrame({
+            "Metrik": metrik_labels,
+            "Training": [f"{v:.2f}%" for v in train_vals],
+            "Testing": [f"{v:.2f}%" for v in test_vals],
+        })
+        st.dataframe(tabel_metrik, use_container_width=True, hide_index=True)
+        st.markdown(
+            f'<span class="gap-chip {chip_class}">Gap Akurasi {gap_akurasi:+.2f}pp — {chip_text}</span>',
+            unsafe_allow_html=True,
+        )
+
 # HALAMAN 2 — VISUALISASI DATASET
-
 elif halaman == "Visualisasi Dataset":
     header("Dataset")
-
     col1, col2 = st.columns(2)
-
     with col1, st.container(border=True):
         eyebrow("Distribusi Sentimen")
         label_counts = df['label'].value_counts()
@@ -478,7 +548,6 @@ elif halaman == "Visualisasi Dataset":
             at.set_fontweight("bold")
         ax1.axis('equal')
         st.pyplot(fig1, use_container_width=True)
-
     with col2, st.container(border=True):
         eyebrow("Jumlah Ulasan per Label")
         fig2, ax2 = plt.subplots(figsize=(5, 4.2))
@@ -491,7 +560,6 @@ elif halaman == "Visualisasi Dataset":
         ax2.grid(axis="y", color=BORDER, linewidth=0.8)
         ax2.set_axisbelow(True)
         st.pyplot(fig2, use_container_width=True)
-
     with st.container(border=True):
         eyebrow("Info Split Data")
         n_train = eval_hasil['n_train']
@@ -502,34 +570,24 @@ elif halaman == "Visualisasi Dataset":
         c2.metric("Data Testing", f"{n_test:,}".replace(",", ".") + f" ({n_test/total*100:.0f}%)")
 
 # HALAMAN 3 — VISUALISASI TF-IDF BIGRAM
-
 elif halaman == "Visualisasi TF-IDF Bigram":
     header("TF-IDF Bigram")
-
     @st.cache_data
     def hitung_top_bigram(df):
         df_pos = df[df['label'] == 'Positif']
         df_neg = df[df['label'] == 'Negatif']
-
         X_pos = vectorizer.transform(df_pos['teks_bersih'].astype(str))
         X_neg = vectorizer.transform(df_neg['teks_bersih'].astype(str))
-
         feature_names = vectorizer.get_feature_names_out()
         mean_pos = np.asarray(X_pos.mean(axis=0)).flatten()
         mean_neg = np.asarray(X_neg.mean(axis=0)).flatten()
-
         top_pos_idx = mean_pos.argsort()[::-1][:20]
         top_neg_idx = mean_neg.argsort()[::-1][:20]
-
         top_pos = [(feature_names[i], mean_pos[i]) for i in top_pos_idx]
         top_neg = [(feature_names[i], mean_neg[i]) for i in top_neg_idx]
-
         return top_pos, top_neg
-
     top_pos, top_neg = hitung_top_bigram(df)
-
     col1, col2 = st.columns(2)
-
     with col1, st.container(border=True):
         eyebrow("Top 20 Bigram — Kelas Positif")
         bigram_pos, skor_pos = zip(*top_pos)
@@ -539,7 +597,6 @@ elif halaman == "Visualisasi TF-IDF Bigram":
         ax3.grid(axis="x", color=BORDER, linewidth=0.8)
         ax3.set_axisbelow(True)
         st.pyplot(fig3, use_container_width=True)
-
     with col2, st.container(border=True):
         eyebrow("Top 20 Bigram — Kelas Negatif")
         bigram_neg, skor_neg = zip(*top_neg)
@@ -549,9 +606,7 @@ elif halaman == "Visualisasi TF-IDF Bigram":
         ax4.grid(axis="x", color=BORDER, linewidth=0.8)
         ax4.set_axisbelow(True)
         st.pyplot(fig4, use_container_width=True)
-
     col3, col4 = st.columns(2)
-
     def get_bigram_freq(teks_series, ngram_range=(2, 2)):
         teks_list = [str(t) for t in teks_series if str(t).strip()]
         if not teks_list:
@@ -562,10 +617,8 @@ elif halaman == "Visualisasi TF-IDF Bigram":
             return dict(zip(cv.get_feature_names_out(), freq_matrix.sum(axis=0).A1))
         except ValueError:
             return None
-
     freq_pos = get_bigram_freq(df[df['label'] == 'Positif']['teks_bersih'])
     freq_neg = get_bigram_freq(df[df['label'] == 'Negatif']['teks_bersih'])
-
     with col3, st.container(border=True):
         eyebrow("Word Cloud — Positif")
         if freq_pos:
@@ -583,7 +636,6 @@ elif halaman == "Visualisasi TF-IDF Bigram":
             st.pyplot(fig5, use_container_width=True, transparent=True)
         else:
             st.caption("Data tidak cukup untuk membentuk Bigram Positif.")
-
     with col4, st.container(border=True):
         eyebrow("Word Cloud — Negatif")
         if freq_neg:
@@ -603,12 +655,9 @@ elif halaman == "Visualisasi TF-IDF Bigram":
             st.caption("Data tidak cukup untuk membentuk Bigram Negatif.")
 
 # HALAMAN 4 — EVALUASI MODEL
-
 elif halaman == "Evaluasi Model":
     header("Evaluasi Model")
-
     col1, col2 = st.columns(2)
-
     with col1, st.container(border=True):
         eyebrow("Confusion Matrix — Data Training")
         fig7, ax7 = plt.subplots(figsize=(5, 4))
@@ -620,7 +669,6 @@ elif halaman == "Evaluasi Model":
         ax7.set_xlabel("Prediksi")
         ax7.set_ylabel("Aktual")
         st.pyplot(fig7, use_container_width=True)
-
     with col2, st.container(border=True):
         eyebrow("Confusion Matrix — Data Testing")
         fig8, ax8 = plt.subplots(figsize=(5, 4))
@@ -642,7 +690,6 @@ elif halaman == "Evaluasi Model":
         st.metric("Recall", f"{eval_hasil['recall_train']*100:.2f}%")
     with c10, st.container(border=True):
         st.metric("F1-Score", f"{eval_hasil['f1_train']*100:.2f}%")    
-
     eyebrow("Metrik — Data Testing")
     c3, c4, c5, c6 = st.columns(4)
     with c3, st.container(border=True):
@@ -655,15 +702,12 @@ elif halaman == "Evaluasi Model":
         st.metric("F1-Score", f"{eval_hasil['f1']*100:.2f}%")
 
 # HALAMAN 5 — PREDIKSI SENTIMEN
-
 elif halaman == "Prediksi Sentimen":
     header("Prediksi & Auto-Labeling", subtitle="Unggah kumpulan ulasan baru untuk diprediksi sentimennya secara otomatis")
-
     if 'df_hasil_prediksi' not in st.session_state:
         st.session_state.df_hasil_prediksi = None
     if 'nama_file_upload' not in st.session_state:
         st.session_state.nama_file_upload = None
-
     @st.cache_data(show_spinner=False)
     def proses_labeling(df_mentah):
         df_mentah = df_mentah.copy()
@@ -689,7 +733,6 @@ elif halaman == "Prediksi Sentimen":
         JARAK_NEGASI = 2
         FRASA_NEGATIF_TETAP = {('tidak', 'bisa'): -3.0, ('tidak', 'dapat'): -3.0, ('belum', 'bisa'): -3.0, ('tidak', 'ada'): -2.0}
         inset_lexicon = {} 
-
         def hitung_skor_inset(teks):
             if pd.isna(teks) or str(teks).strip() == '': return 0
             kata_kata = str(teks).strip().split()
@@ -697,13 +740,11 @@ elif halaman == "Prediksi Sentimen":
             consumed = set()
             total = 0
             KATA_KONTRAS = {'malah', 'padahal', 'tapi', 'tetapi', 'giliran'}
-
             for i in range(n - 1):
                 pair = (kata_kata[i], kata_kata[i + 1])
                 if pair in FRASA_NEGATIF_TETAP and i not in consumed and (i + 1) not in consumed:
                     total += int(FRASA_NEGATIF_TETAP[pair])
                     consumed.add(i); consumed.add(i + 1)
-
             i = 0
             while i < n:
                 if i in consumed:
@@ -723,21 +764,17 @@ elif halaman == "Prediksi Sentimen":
                         total += int(skor_kata)
                 i += 1
             return total
-
         def hybrid_labeling(row):
             if row['rating'] in [1, 2]: return 'Negatif'
             skor = row['skor_inset']
             if skor > 0: return 'Positif'
             elif skor < 0: return 'Negatif'
             else: return None
-
         df_mentah['skor_inset'] = df_mentah['teks_bersih'].apply(hitung_skor_inset)
         df_mentah['Label_Lexicon'] = df_mentah.apply(hybrid_labeling, axis=1)
         
         df_mentah = df_mentah[df_mentah['Label_Lexicon'].notna()].reset_index(drop=True)
-
         return df_mentah
-
     @st.cache_data(show_spinner=False)
     def proses_analisis(df_label):
         df_label = df_label.copy()
@@ -745,16 +782,13 @@ elif halaman == "Prediksi Sentimen":
             vec = vectorizer.transform(df_label["teks_bersih"])
             df_label["Prediksi_ML"] = model.predict(vec)
         return df_label
-
     with st.container(border=True):
         eyebrow("Unggah Ulasan Baru")
         berkas = st.file_uploader("", type=["xlsx"], label_visibility="collapsed")
         st.caption("Maksimal ukuran file 10 MB dan wajib ada kolom 'ulasan' dan 'rating'")
-
     if berkas is not None:
         df_baru = pd.read_excel(berkas)
         st.success(f"{berkas.name} — {len(df_baru)} baris terbaca")
-
         if st.session_state.nama_file_upload != berkas.name:
             st.session_state.df_hasil_prediksi = None
             st.session_state.nama_file_upload = berkas.name
@@ -762,7 +796,6 @@ elif halaman == "Prediksi Sentimen":
         if "ulasan" not in df_baru.columns or "rating" not in df_baru.columns:
             st.error("Berkas error: Pastikan ada kolom 'ulasan' dan 'rating'.")
         else:
-
             if st.session_state.df_hasil_prediksi is None:
                 loader_html = """
                 <style>
@@ -847,17 +880,14 @@ elif halaman == "Prediksi Sentimen":
                 
                 loader_placeholder.empty()
                 st.session_state.df_hasil_prediksi = df_final
-
     if st.session_state.df_hasil_prediksi is not None:
         df_final = st.session_state.df_hasil_prediksi
         total_berhasil = len(df_final)
-
         if total_berhasil > 0:
             akurasi_baru = accuracy_score(df_final["Label_Lexicon"], df_final["Prediksi_ML"])
             presisi_baru = precision_score(df_final["Label_Lexicon"], df_final["Prediksi_ML"], pos_label='Positif')
             recall_baru = recall_score(df_final["Label_Lexicon"], df_final["Prediksi_ML"], pos_label='Positif')
             f1_baru = f1_score(df_final["Label_Lexicon"], df_final["Prediksi_ML"], pos_label='Positif')
-
             eyebrow("Metrik Data Baru")
             c1, c2, c3, c4 = st.columns(4)
             with c1, st.container(border=True):
@@ -868,10 +898,8 @@ elif halaman == "Prediksi Sentimen":
                 st.metric("Recall", f"{recall_baru*100:.2f}%")
             with c4, st.container(border=True):
                 st.metric("F1-Score", f"{f1_baru*100:.2f}%")
-
             cm_baru = confusion_matrix(df_final["Label_Lexicon"], df_final["Prediksi_ML"], labels=["Negatif", "Positif"])
             tn_baru, fp_baru, fn_baru, tp_baru = cm_baru.ravel()
-
             with st.expander("Rincian Confusion Matrix"):
                 st.markdown(
                     f'''
@@ -896,21 +924,17 @@ elif halaman == "Prediksi Sentimen":
                     ''',
                     unsafe_allow_html=True,
                 )
-
             n_positif = int((df_final["Prediksi_ML"] == "Positif").sum())
             n_negatif = int((df_final["Prediksi_ML"] == "Negatif").sum())
             pct_pos = (n_positif / total_berhasil * 100)
             pct_neg = (n_negatif / total_berhasil * 100)
-
             eyebrow("Distribusi Hasil Prediksi")
             c1_dist, c2_dist = st.columns(2)
             c1_dist.markdown(f'<div class="pill-positif">Positif&nbsp;&nbsp;{n_positif} ({pct_pos:.1f}%)</div>', unsafe_allow_html=True)
             c2_dist.markdown(f'<div class="pill-negatif">Negatif&nbsp;&nbsp;{n_negatif} ({pct_neg:.1f}%)</div>', unsafe_allow_html=True)
-
             with st.expander("Pratinjau hasil — 10 baris pertama"):
                 preview_df = df_final[["ulasan", "Prediksi_ML"]].head(10).rename(columns={"ulasan": "Ulasan", "Prediksi_ML": "Prediksi"})
                 st.dataframe(preview_df, use_container_width=True, hide_index=True)
-
             c5, c6 = st.columns(2)
             
             from sklearn.feature_extraction.text import CountVectorizer
@@ -924,10 +948,8 @@ elif halaman == "Prediksi Sentimen":
                     return dict(zip(cv.get_feature_names_out(), freq_matrix.sum(axis=0).A1))
                 except ValueError:
                     return None
-
             freq_pos = get_bigram_freq(df_final.loc[df_final["Prediksi_ML"] == "Positif", "teks_bersih"])
             freq_neg = get_bigram_freq(df_final.loc[df_final["Prediksi_ML"] == "Negatif", "teks_bersih"])
-
             with c5, st.container(border=True):
                 eyebrow("Word Cloud — Positif")
                 if freq_pos:
@@ -945,7 +967,6 @@ elif halaman == "Prediksi Sentimen":
                     st.pyplot(figA, use_container_width=True, transparent=True)
                 else:
                     st.caption("Data tidak cukup untuk membentuk Bigram Positif.")
-
             with c6, st.container(border=True):
                 eyebrow("Word Cloud — Negatif")
                 if freq_neg:
@@ -963,7 +984,6 @@ elif halaman == "Prediksi Sentimen":
                     st.pyplot(figB, use_container_width=True, transparent=True)
                 else:
                     st.caption("Data tidak cukup untuk membentuk Bigram Negatif.")
-
             
             import io
             buffer = io.BytesIO()
@@ -971,7 +991,6 @@ elif halaman == "Prediksi Sentimen":
                 df_final[["ulasan", "Prediksi_ML"]].rename(
                     columns={"ulasan": "Ulasan", "Prediksi_ML": "Prediksi"}
                 ).to_excel(writer, index=False, sheet_name="Hasil Prediksi")
-
             col_left, col_right = st.columns([4, 1])
             with col_right:
                 st.download_button(
