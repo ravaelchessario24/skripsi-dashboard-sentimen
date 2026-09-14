@@ -648,22 +648,20 @@ if halaman == "Halaman Utama":
 elif halaman == "Visualisasi Dataset":
     header("Dataset")
 
-    tren_dataset, df_tanggal_dataset = hitung_tren_bulanan(df)
+        tren_dataset, df_tanggal_dataset = hitung_tren_bulanan(df)
     if not df_tanggal_dataset.empty:
-        tgl_min = df_tanggal_dataset['tanggal'].min().date()
-        tgl_max = df_tanggal_dataset['tanggal'].max().date()
-        rentang = st.date_input(
-            "Filter Periode Ulasan", value=(tgl_min, tgl_max),
-            min_value=tgl_min, max_value=tgl_max
+        daftar_bulan = sorted(df_tanggal_dataset['tanggal'].dt.to_period('M').unique())
+        label_bulan = {b: b.strftime('%b %Y') for b in daftar_bulan}
+        bulan_mulai, bulan_akhir = st.select_slider(
+            "Filter Periode Ulasan",
+            options=daftar_bulan,
+            value=(daftar_bulan[0], daftar_bulan[-1]),
+            format_func=lambda b: label_bulan[b],
         )
-        if isinstance(rentang, tuple) and len(rentang) == 2:
-            mulai, akhir = rentang
-            df_view = df_tanggal_dataset[
-                (df_tanggal_dataset['tanggal'].dt.date >= mulai) &
-                (df_tanggal_dataset['tanggal'].dt.date <= akhir)
-            ]
-        else:
-            df_view = df_tanggal_dataset
+        df_view = df_tanggal_dataset[
+            (df_tanggal_dataset['tanggal'].dt.to_period('M') >= bulan_mulai) &
+            (df_tanggal_dataset['tanggal'].dt.to_period('M') <= bulan_akhir)
+        ]
     else:
         df_view = df
 
