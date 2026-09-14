@@ -648,7 +648,7 @@ if halaman == "Halaman Utama":
 elif halaman == "Visualisasi Dataset":
     header("Dataset")
 
-        tren_dataset, df_tanggal_dataset = hitung_tren_bulanan(df)
+    tren_dataset, df_tanggal_dataset = hitung_tren_bulanan(df)
     if not df_tanggal_dataset.empty:
         daftar_bulan = sorted(df_tanggal_dataset['tanggal'].dt.to_period('M').unique())
         label_bulan = {b: b.strftime('%b %Y') for b in daftar_bulan}
