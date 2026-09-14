@@ -1088,10 +1088,10 @@ elif halaman == "Prediksi Sentimen":
             recall_baru = recall_score(df_final["Label_Lexicon"], df_final["Prediksi_ML"], pos_label='Positif')
             f1_baru = f1_score(df_final["Label_Lexicon"], df_final["Prediksi_ML"], pos_label='Positif')
 
-            sudah_tercatat = any(r['File'] == berkas.name for r in st.session_state.riwayat_upload)
+            sudah_tercatat = any(r['File'] == st.session_state.nama_file_upload for r in st.session_state.riwayat_upload)
             if not sudah_tercatat:
                 st.session_state.riwayat_upload.append({
-                    "File": berkas.name,
+                    "File": st.session_state.nama_file_upload,
                     "Waktu": datetime.now().strftime("%Y-%m-%d %H:%M"),
                     "Jumlah Data": total_berhasil,
                     "Akurasi": f"{akurasi_baru*100:.2f}%",
@@ -1187,10 +1187,9 @@ elif halaman == "Prediksi Sentimen":
                 ).to_excel(writer, index=False, sheet_name="Hasil Prediksi")
 
             pdf_bytes = generate_laporan_pdf(
-                berkas.name, total_berhasil, akurasi_baru, presisi_baru, recall_baru, f1_baru,
+                st.session_state.nama_file_upload, total_berhasil, akurasi_baru, presisi_baru, recall_baru, f1_baru,
                 n_positif, n_negatif, freq_pos, freq_neg
             )
-
             col_left, col_mid, col_right = st.columns([3, 1, 1])
             with col_mid:
                 st.download_button(
