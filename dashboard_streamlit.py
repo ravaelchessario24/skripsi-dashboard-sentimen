@@ -88,7 +88,8 @@ html, body, [class*="css"] {{
     letter-spacing: -0.01em;
 }}
 .app-header p {{
-    color: {MUTED};
+    color: var(--text-color);
+    opacity: 0.7;
     font-size: 0.88rem;
     margin: 0.25rem 0 0 0;
 }}
@@ -137,7 +138,8 @@ div[data-testid="stMetric"] {{
     background: transparent;
 }}
 div[data-testid="stMetricLabel"] {{
-    color: {MUTED};
+    color: var(--text-color);
+    opacity: 0.7;
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.01em;
@@ -150,7 +152,7 @@ div[data-testid="stMetricValue"] {{
 .card-title {{
     font-weight: 700;
     font-size: 0.95rem;
-    color: {INK};
+    color: var(--text-color);
     margin-bottom: 0.5rem;
 }}
 .pill-positif {{
@@ -175,7 +177,8 @@ div[data-testid="stMetricValue"] {{
 }}
 /* ===== Halaman Utama: KPI card ===== */
 .kpi-label {{
-    color: {MUTED};
+    color: var(--text-color);
+    opacity: 0.65;
     font-size: 0.82rem;
     font-weight: 600;
     margin-bottom: 0.15rem;
@@ -193,9 +196,10 @@ div[data-testid="stMetricValue"] {{
 }}
 .kpi-sub.green {{ color: {GREEN_DARK}; }}
 .kpi-sub.red {{ color: {RED}; }}
-.kpi-sub.neutral {{ color: {MUTED}; font-weight: 600; }}
+.kpi-sub.neutral {{ color: var(--text-color); opacity: 0.65; font-weight: 600; }}
 .mm-label {{
-    color: {MUTED};
+    color: var(--text-color);
+    opacity: 0.65;
     font-size: 0.82rem;
     font-weight: 600;
     margin-bottom: 0.35rem;
@@ -212,7 +216,7 @@ div[data-testid="stMetricValue"] {{
     font-size: 0.85rem;
     font-weight: 600;
     margin-bottom: 0.55rem;
-    color: {INK};
+    color: var(--text-color);
 }}
 .legend-dot {{
     width: 10px;
@@ -222,7 +226,7 @@ div[data-testid="stMetricValue"] {{
 }}
 .legend-dot.green {{ background: {GREEN}; }}
 .legend-dot.red {{ background: {RED}; }}
-.legend-count {{ color: {MUTED}; font-weight: 500; margin-left: auto; }}
+.legend-count {{ color: var(--text-color); opacity: 0.65; font-weight: 500; margin-left: auto; }}
 /* ===== end tambahan ===== */
 section[data-testid="stSidebar"] {{
     background: linear-gradient(180deg, {GREEN_DARK} 0%, {GREEN_DARK} 100%);
@@ -282,15 +286,12 @@ section[data-testid="stSidebar"] hr {{
 section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {{
     color: rgba(255,255,255,0.55) !important;
 }}
-section[data-testid="stSidebar"] {{
-    --primary-color: #FFFFFF;
-}}
-section[data-testid="stSidebar"] div[data-baseweb="slider"] div[role="slider"] {{
-    background-color: #FFFFFF !important;
-    border-color: #FFFFFF !important;
-}}
 section[data-testid="stSidebar"] div[data-testid="stTickBarMin"],
-section[data-testid="stSidebar"] div[data-testid="stTickBarMax"] {{
+section[data-testid="stSidebar"] div[data-testid="stTickBarMax"],
+section[data-testid="stSidebar"] div[data-testid="stSliderTickBarMin"],
+section[data-testid="stSidebar"] div[data-testid="stSliderTickBarMax"],
+section[data-testid="stSidebar"] div[data-testid="stThumbValue"],
+section[data-testid="stSidebar"] div[data-baseweb="slider"] [role="tooltip"] {{
     display: none !important;
 }}
 div.stButton > button {{
@@ -330,6 +331,17 @@ KATEGORI_ISU = {
     "Layanan & Fitur": ["layanan", "fitur", "antrian", "jadwal", "pelayanan"],
 }
 
+BULAN_ID_PENDEK = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "Mei", 6: "Jun",
+                    7: "Jul", 8: "Agu", 9: "Sep", 10: "Okt", 11: "Nov", 12: "Des"}
+BULAN_ID_PANJANG = {1: "Januari", 2: "Februari", 3: "Maret", 4: "April", 5: "Mei", 6: "Juni",
+                     7: "Juli", 8: "Agustus", 9: "September", 10: "Oktober", 11: "November", 12: "Desember"}
+
+def format_bulan_pendek(period):
+    return f"{BULAN_ID_PENDEK[period.month]} {str(period.year)[-2:]}"
+
+def format_bulan_panjang(period):
+    return f"{BULAN_ID_PANJANG[period.month]} {period.year}"
+
 def set_mpl_style():
     plt.rcParams.update({
         "font.family": "sans-serif",
@@ -340,8 +352,8 @@ def set_mpl_style():
         "ytick.color": MUTED,
         "axes.spines.top": False,
         "axes.spines.right": False,
-        "figure.facecolor": "none",
-        "axes.facecolor": "none",
+        "figure.facecolor": "white",
+        "axes.facecolor": "white",
     })
 set_mpl_style()
 
@@ -525,7 +537,7 @@ with st.sidebar:
     _, df_tanggal_global = hitung_tren_bulanan(df)
     if not df_tanggal_global.empty:
         daftar_bulan_global = sorted(df_tanggal_global['tanggal'].dt.to_period('M').unique())
-        label_bulan_global = {b: b.strftime('%b %y') for b in daftar_bulan_global}
+        label_bulan_global = {b: format_bulan_pendek(b) for b in daftar_bulan_global}
         st.markdown('<div class="sidebar-nav-label">Filter Periode</div>', unsafe_allow_html=True)
         bulan_mulai, bulan_akhir = st.select_slider(
             "Filter Periode Global",
@@ -555,12 +567,12 @@ if bulan_mulai is not None:
     ]
     subtitle_filtered = (
         f"Ulasan pengguna aplikasi Mobile JKN pada Google Play Store "
-        f"Periode {bulan_mulai.strftime('%B %Y')} - {bulan_akhir.strftime('%B %Y')}"
+        f"Periode {format_bulan_panjang(bulan_mulai)} - {format_bulan_panjang(bulan_akhir)}"
     )
 else:
     df_filtered = df
     subtitle_filtered = "Ulasan pengguna aplikasi Mobile JKN pada Google Play Store"
-  
+
 # HALAMAN 1 — UTAMA
 if halaman == "Halaman Utama":
     header("Ringkasan", subtitle=subtitle_filtered)
@@ -605,7 +617,7 @@ if halaman == "Halaman Utama":
     with col_tren, st.container(border=True):
         st.markdown('<div class="card-title">Tren Sentimen per Bulan</div>', unsafe_allow_html=True)
         if n_bulan > 0:
-            x_labels = [p.strftime('%b %y') for p in tren.index]
+            x_labels = [format_bulan_pendek(p) for p in tren.index]
             fig_tren, ax_tren = plt.subplots(figsize=(8, 3.8))
             ax_tren.plot(x_labels, tren['Positif'], marker='o', markersize=5,
                          linewidth=2.2, color=GREEN, label='Positif', zorder=3)
