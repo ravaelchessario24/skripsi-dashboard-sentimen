@@ -547,6 +547,14 @@ with st.sidebar:
     )
     st.markdown("---")
     st.caption("Analisis Sentimen Mobile JKN, 2026")
+
+if bulan_mulai is not None:
+    df_filtered = df_tanggal_global[
+        (df_tanggal_global['tanggal'].dt.to_period('M') >= bulan_mulai) &
+        (df_tanggal_global['tanggal'].dt.to_period('M') <= bulan_akhir)
+    ]
+else:
+    df_filtered = df
   
 # HALAMAN 1 — UTAMA
 if halaman == "Halaman Utama":
