@@ -223,21 +223,6 @@ div[data-testid="stMetricValue"] {{
 .legend-dot.green {{ background: {GREEN}; }}
 .legend-dot.red {{ background: {RED}; }}
 .legend-count {{ color: {MUTED}; font-weight: 500; margin-left: auto; }}
-/* ===== Insight Bisnis ===== */
-.insight-card {{
-    border-left: 4px solid {GREEN};
-    background: {GREEN_TINT};
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.6rem;
-    border-radius: 8px;
-    font-size: 0.92rem;
-    color: {INK};
-    line-height: 1.5;
-}}
-.insight-card.warn {{
-    border-left-color: {RED};
-    background: {RED_LIGHT};
-}}
 /* ===== end tambahan ===== */
 section[data-testid="stSidebar"] {{
     background: linear-gradient(180deg, {GREEN_DARK} 0%, {GREEN_DARK} 100%);
@@ -796,7 +781,7 @@ elif halaman == "Visualisasi TF-IDF Bigram":
             ax9.grid(axis="x", color=BORDER, linewidth=0.8)
             ax9.set_axisbelow(True)
             st.pyplot(fig9, use_container_width=True)
-            st.caption("Kategorisasi berbasis kata kunci sederhana (lihat dict KATEGORI_ISU) — sesuaikan kalau ada istilah baru yang relevan.")
+            st.caption("Pengelompokan pakai kata kunci manual di KATEGORI_ISU, bukan hasil model.")
         else:
             st.caption("Data tidak cukup untuk kategorisasi isu.")
 
@@ -1190,6 +1175,7 @@ elif halaman == "Prediksi Sentimen":
                 st.session_state.nama_file_upload, total_berhasil, akurasi_baru, presisi_baru, recall_baru, f1_baru,
                 n_positif, n_negatif, freq_pos, freq_neg
             )
+
             col_left, col_mid, col_right = st.columns([3, 1, 1])
             with col_mid:
                 st.download_button(
