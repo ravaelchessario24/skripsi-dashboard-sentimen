@@ -519,8 +519,25 @@ with st.sidebar:
         label_visibility="collapsed",
     )
     st.markdown("---")
-    st.caption("Analisis Sentimen Mobile JKN, 2026")
 
+    _, df_tanggal_global = hitung_tren_bulanan(df)
+    if not df_tanggal_global.empty:
+        daftar_bulan_global = sorted(df_tanggal_global['tanggal'].dt.to_period('M').unique())
+        label_bulan_global = {b: b.strftime('%b %y') for b in daftar_bulan_global}
+        st.markdown('<div class="sidebar-nav-label">Filter Periode</div>', unsafe_allow_html=True)
+        bulan_mulai, bulan_akhir = st.select_slider(
+            "Filter Periode Global",
+            options=daftar_bulan_global,
+            value=(daftar_bulan_global[0], daftar_bulan_global[-1]),
+            format_func=lambda b: label_bulan_global[b],
+            label_visibility="collapsed",
+        )
+    else:
+        bulan_mulai, bulan_akhir = None, None
+
+    st.markdown("---")
+    st.caption("Analisis Sentimen Mobile JKN, 2026")
+  
 # HALAMAN 1 — UTAMA
 if halaman == "Halaman Utama":
     header("Ringkasan")
