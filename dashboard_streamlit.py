@@ -282,16 +282,16 @@ section[data-testid="stSidebar"] hr {{
 section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {{
     color: rgba(255,255,255,0.55) !important;
 }}
+section[data-testid="stSidebar"] {{
+    --primary-color: #FFFFFF;
+}}
 section[data-testid="stSidebar"] div[data-baseweb="slider"] div[role="slider"] {{
     background-color: #FFFFFF !important;
     border-color: #FFFFFF !important;
 }}
-section[data-testid="stSidebar"] div[data-baseweb="slider"] > div > div:nth-child(2) {{
-    background: #FFFFFF !important;
-}}
 section[data-testid="stSidebar"] div[data-testid="stTickBarMin"],
 section[data-testid="stSidebar"] div[data-testid="stTickBarMax"] {{
-    color: rgba(255,255,255,0.75) !important;
+    display: none !important;
 }}
 div.stButton > button {{
     background: {GREEN};
@@ -553,12 +553,17 @@ if bulan_mulai is not None:
         (df_tanggal_global['tanggal'].dt.to_period('M') >= bulan_mulai) &
         (df_tanggal_global['tanggal'].dt.to_period('M') <= bulan_akhir)
     ]
+    subtitle_filtered = (
+        f"Ulasan pengguna aplikasi Mobile JKN pada Google Play Store "
+        f"Periode {bulan_mulai.strftime('%B %Y')} - {bulan_akhir.strftime('%B %Y')}"
+    )
 else:
     df_filtered = df
+    subtitle_filtered = "Ulasan pengguna aplikasi Mobile JKN pada Google Play Store"
   
 # HALAMAN 1 — UTAMA
 if halaman == "Halaman Utama":
-    header("Ringkasan")
+    header("Ringkasan", subtitle=subtitle_filtered)
 
     total_ulasan = len(df_filtered)
     total_positif = int((df_filtered['label'] == 'Positif').sum())
@@ -665,7 +670,7 @@ if halaman == "Halaman Utama":
 
 # HALAMAN 2 — VISUALISASI DATASET
 elif halaman == "Visualisasi Dataset":
-    header("Dataset")
+    header("Dataset", subtitle=subtitle_filtered)
 
     df_view = df_filtered
 
@@ -725,7 +730,7 @@ elif halaman == "Visualisasi Dataset":
 
 # HALAMAN 3 — VISUALISASI TF-IDF BIGRAM
 elif halaman == "Visualisasi TF-IDF Bigram":
-    header("TF-IDF Bigram")
+    header("TF-IDF Bigram", subtitle=subtitle_filtered)
     @st.cache_data
     def hitung_top_bigram(df):
         df_pos = df[df['label'] == 'Positif']
