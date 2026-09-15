@@ -500,7 +500,18 @@ with st.sidebar:
         logo_bpjs_putih_html = f'<img src="data:image/png;base64,{logo_bpjs_putih_b64}" style="height: 80px; width: auto; margin-bottom: 12px;">'
     except:
         logo_bpjs_putih_html = ''
-        st.markdown('<div class="sidebar-nav-label">Navigasi</div>', unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div class="sidebar-brand">
+            {logo_bpjs_putih_html}
+            <div class="brand-title">Mobile JKN</div>
+            <div class="brand-sub">Dashboard Analisis Sentimen</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    
+    st.markdown('<div class="sidebar-nav-label">Navigasi</div>', unsafe_allow_html=True)
     halaman = st.radio(
         "Navigasi",
         ["Halaman Utama", "Visualisasi Dataset", "Visualisasi TF-IDF Bigram",
@@ -508,43 +519,19 @@ with st.sidebar:
         label_visibility="collapsed",
     )
     st.markdown("---")
-
-    _, df_tanggal_global = hitung_tren_bulanan(df)
-    if not df_tanggal_global.empty:
-        daftar_bulan_global = sorted(df_tanggal_global['tanggal'].dt.to_period('M').unique())
-        label_bulan_global = {b: b.strftime('%b %y') for b in daftar_bulan_global}
-        st.markdown('<div class="sidebar-nav-label">Filter Periode</div>', unsafe_allow_html=True)
-        bulan_mulai, bulan_akhir = st.select_slider(
-            "Filter Periode Global",
-            options=daftar_bulan_global,
-            value=(daftar_bulan_global[0], daftar_bulan_global[-1]),
-            format_func=lambda b: label_bulan_global[b],
-            label_visibility="collapsed",
-        )
-    else:
-        bulan_mulai, bulan_akhir = None, None
-
-    st.markdown("---")
     st.caption("Analisis Sentimen Mobile JKN, 2026")
-
-if bulan_mulai is not None:
-    df_filtered = df_tanggal_global[
-        (df_tanggal_global['tanggal'].dt.to_period('M') >= bulan_mulai) &
-        (df_tanggal_global['tanggal'].dt.to_period('M') <= bulan_akhir)
-    ]
-else:
-    df_filtered = df
 
 # HALAMAN 1 — UTAMA
 if halaman == "Halaman Utama":
     header("Ringkasan")
 
-    total_ulasan = len(df_filtered)
-    total_positif = int((df_filtered['label'] == 'Positif').sum())
-    total_negatif = int((df_filtered['label'] == 'Negatif').sum())
+    total_ulasan = len(df)
+    total_positif = int((df['label'] == 'Positif').sum())
+    total_negatif = int((df['label'] == 'Negatif').sum())
     pct_pos_home = total_positif / total_ulasan * 100
     pct_neg_home = total_negatif / total_ulasan * 100
-    tren, df_tanggal = hitung_tren_bulanan(df_filtered)
+
+    tren, df_tanggal = hitung_tren_bulanan(df)
     n_bulan = tren.shape[0] if not tren.empty else 0
 
     # ---------- KPI ROW ----------
@@ -646,7 +633,22 @@ if halaman == "Halaman Utama":
 elif halaman == "Visualisasi Dataset":
     header("Dataset")
 
-    df_view = df_filtered
+    tren_dataset, df_tanggal_dataset = hitung_tren_bulanan(df)
+    if not df_tanggal_dataset.empty:
+        daftar_bulan = sorted(df_tanggal_dataset['tanggal'].dt.to_period('M').unique())
+        label_bulan = {b: b.strftime('%b %Y') for b in daftar_bulan}
+        bulan_mulai, bulan_akhir = st.select_slider(
+            "Filter Periode Ulasan",
+            options=daftar_bulan,
+            value=(daftar_bulan[0], daftar_bulan[-1]),
+            format_func=lambda b: label_bulan[b],
+        )
+        df_view = df_tanggal_dataset[
+            (df_tanggal_dataset['tanggal'].dt.to_period('M') >= bulan_mulai) &
+            (df_tanggal_dataset['tanggal'].dt.to_period('M') <= bulan_akhir)
+        ]
+    else:
+        df_view = df
 
     col1, col2 = st.columns(2)
     with col1, st.container(border=True):
@@ -719,7 +721,7 @@ elif halaman == "Visualisasi TF-IDF Bigram":
         top_pos = [(feature_names[i], mean_pos[i]) for i in top_pos_idx]
         top_neg = [(feature_names[i], mean_neg[i]) for i in top_neg_idx]
         return top_pos, top_neg
-    top_pos, top_neg = hitung_top_bigram(df_filtered)
+    top_pos, top_neg = hitung_top_bigram(df)
     col1, col2 = st.columns(2)
     with col1, st.container(border=True):
         eyebrow("Top 20 Bigram — Kelas Positif")
@@ -741,8 +743,8 @@ elif halaman == "Visualisasi TF-IDF Bigram":
         st.pyplot(fig4, use_container_width=True)
 
     col3, col4 = st.columns(2)
-    freq_pos = get_bigram_freq(df_filtered[df_filtered['label'] == 'Positif']['teks_bersih'])
-    freq_neg = get_bigram_freq(df_filtered[df_filtered['label'] == 'Negatif']['teks_bersih'])
+    freq_pos = get_bigram_freq(df[df['label'] == 'Positif']['teks_bersih'])
+    freq_neg = get_bigram_freq(df[df['label'] == 'Negatif']['teks_bersih'])
     with col3, st.container(border=True):
         eyebrow("Word Cloud — Positif")
         if freq_pos:
