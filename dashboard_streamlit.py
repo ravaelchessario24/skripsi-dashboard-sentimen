@@ -282,6 +282,17 @@ section[data-testid="stSidebar"] hr {{
 section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {{
     color: rgba(255,255,255,0.55) !important;
 }}
+section[data-testid="stSidebar"] div[data-baseweb="slider"] div[role="slider"] {{
+    background-color: #FFFFFF !important;
+    border-color: #FFFFFF !important;
+}}
+section[data-testid="stSidebar"] div[data-baseweb="slider"] > div > div:nth-child(2) {{
+    background: #FFFFFF !important;
+}}
+section[data-testid="stSidebar"] div[data-testid="stTickBarMin"],
+section[data-testid="stSidebar"] div[data-testid="stTickBarMax"] {{
+    color: rgba(255,255,255,0.75) !important;
+}}
 div.stButton > button {{
     background: {GREEN};
     color: white;
@@ -510,15 +521,6 @@ with st.sidebar:
         """,
         unsafe_allow_html=True,
     )
-    
-    st.markdown('<div class="sidebar-nav-label">Navigasi</div>', unsafe_allow_html=True)
-    halaman = st.radio(
-        "Navigasi",
-        ["Halaman Utama", "Visualisasi Dataset", "Visualisasi TF-IDF Bigram",
-         "Evaluasi Model", "Prediksi Sentimen"],
-        label_visibility="collapsed",
-    )
-    st.markdown("---")
 
     _, df_tanggal_global = hitung_tren_bulanan(df)
     if not df_tanggal_global.empty:
@@ -536,19 +538,26 @@ with st.sidebar:
         bulan_mulai, bulan_akhir = None, None
 
     st.markdown("---")
+    st.markdown('<div class="sidebar-nav-label">Navigasi</div>', unsafe_allow_html=True)
+    halaman = st.radio(
+        "Navigasi",
+        ["Halaman Utama", "Visualisasi Dataset", "Visualisasi TF-IDF Bigram",
+         "Evaluasi Model", "Prediksi Sentimen"],
+        label_visibility="collapsed",
+    )
+    st.markdown("---")
     st.caption("Analisis Sentimen Mobile JKN, 2026")
   
 # HALAMAN 1 — UTAMA
 if halaman == "Halaman Utama":
     header("Ringkasan")
 
-    total_ulasan = len(df)
-    total_positif = int((df['label'] == 'Positif').sum())
-    total_negatif = int((df['label'] == 'Negatif').sum())
+    total_ulasan = len(df_filtered)
+    total_positif = int((df_filtered['label'] == 'Positif').sum())
+    total_negatif = int((df_filtered['label'] == 'Negatif').sum())
     pct_pos_home = total_positif / total_ulasan * 100
     pct_neg_home = total_negatif / total_ulasan * 100
-
-    tren, df_tanggal = hitung_tren_bulanan(df)
+    tren, df_tanggal = hitung_tren_bulanan(df_filtered)
     n_bulan = tren.shape[0] if not tren.empty else 0
 
     # ---------- KPI ROW ----------
@@ -650,22 +659,7 @@ if halaman == "Halaman Utama":
 elif halaman == "Visualisasi Dataset":
     header("Dataset")
 
-    tren_dataset, df_tanggal_dataset = hitung_tren_bulanan(df)
-    if not df_tanggal_dataset.empty:
-        daftar_bulan = sorted(df_tanggal_dataset['tanggal'].dt.to_period('M').unique())
-        label_bulan = {b: b.strftime('%b %Y') for b in daftar_bulan}
-        bulan_mulai, bulan_akhir = st.select_slider(
-            "Filter Periode Ulasan",
-            options=daftar_bulan,
-            value=(daftar_bulan[0], daftar_bulan[-1]),
-            format_func=lambda b: label_bulan[b],
-        )
-        df_view = df_tanggal_dataset[
-            (df_tanggal_dataset['tanggal'].dt.to_period('M') >= bulan_mulai) &
-            (df_tanggal_dataset['tanggal'].dt.to_period('M') <= bulan_akhir)
-        ]
-    else:
-        df_view = df
+    df_view = df_filtered
 
     col1, col2 = st.columns(2)
     with col1, st.container(border=True):
@@ -738,7 +732,7 @@ elif halaman == "Visualisasi TF-IDF Bigram":
         top_pos = [(feature_names[i], mean_pos[i]) for i in top_pos_idx]
         top_neg = [(feature_names[i], mean_neg[i]) for i in top_neg_idx]
         return top_pos, top_neg
-    top_pos, top_neg = hitung_top_bigram(df)
+    top_pos, top_neg = hitung_top_bigram(df_filtered)
     col1, col2 = st.columns(2)
     with col1, st.container(border=True):
         eyebrow("Top 20 Bigram — Kelas Positif")
@@ -760,8 +754,8 @@ elif halaman == "Visualisasi TF-IDF Bigram":
         st.pyplot(fig4, use_container_width=True)
 
     col3, col4 = st.columns(2)
-    freq_pos = get_bigram_freq(df[df['label'] == 'Positif']['teks_bersih'])
-    freq_neg = get_bigram_freq(df[df['label'] == 'Negatif']['teks_bersih'])
+    freq_pos = get_bigram_freq(df_filtered[df_filtered['label'] == 'Positif']['teks_bersih'])
+    freq_neg = get_bigram_freq(df_filtered[df_filtered['label'] == 'Negatif']['teks_bersih'])
     with col3, st.container(border=True):
         eyebrow("Word Cloud — Positif")
         if freq_pos:
