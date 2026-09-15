@@ -29,7 +29,7 @@ GREEN = "#09A750"
 GREEN_DARK = "#077839"   
 RED = "#E03E3E"          
 
-# CSS: 100% NATIVE DYNAMIC THEME + ULTRA MOBILE & TABLET OPTIMIZATION
+# CSS: ULTRA MOBILE RESPONSIVE + OPAQUE MOBILE DRAWER
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap');
@@ -51,7 +51,7 @@ html, body, [class*="css"] {{
 
 [data-testid="stHeader"] {{
     background: transparent;
-    z-index: 100;
+    z-index: 99;
 }}
 
 .block-container {{
@@ -61,19 +61,17 @@ html, body, [class*="css"] {{
     width: 100%;
 }}
 
-/* ====================================================
-   BUTTON NAVIGASI EXPANDER SIDEBAR (PENGGANTI ICON ">>" KAKU)
-   ==================================================== */
+/* BUTTON NAVIGASI EXPANDER SIDEBAR (PENGGANTI ">>") */
 button[data-testid="stSidebarCollapseButton"],
 [data-testid="collapsedControl"] button,
 button[kind="header"] {{
-    background: rgba(255, 255, 255, 0.8) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
     backdrop-filter: blur(14px) !important;
     -webkit-backdrop-filter: blur(14px) !important;
-    border: 1px solid rgba(128, 128, 128, 0.2) !important;
+    border: 1px solid rgba(128, 128, 128, 0.22) !important;
     border-radius: 12px !important;
     color: var(--text-color) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     min-width: 42px !important;
     min-height: 42px !important;
@@ -87,21 +85,13 @@ button[kind="header"] {{
 button[data-testid="stSidebarCollapseButton"]:hover,
 [data-testid="collapsedControl"] button:hover,
 button[kind="header"]:hover {{
-    background: rgba(9, 167, 80, 0.12) !important;
+    background: rgba(9, 167, 80, 0.14) !important;
     border-color: rgba(9, 167, 80, 0.4) !important;
     color: {GREEN} !important;
     transform: translateY(-1px) scale(1.04) !important;
-    box-shadow: 0 6px 20px rgba(9, 167, 80, 0.15) !important;
 }}
 
-button[data-testid="stSidebarCollapseButton"] svg,
-[data-testid="collapsedControl"] button svg {{
-    fill: currentColor !important;
-    stroke: currentColor !important;
-    transform: scale(1.1);
-}}
-
-/* APP HEADER: UNIVERSAL FROSTED GLASS */
+/* APP HEADER */
 .app-header {{
     padding: clamp(0.9rem, 2vw, 1.2rem) clamp(1rem, 2.5vw, 1.6rem);
     background: var(--secondary-background-color);
@@ -174,7 +164,7 @@ button[data-testid="stSidebarCollapseButton"] svg,
     flex-shrink: 0;
 }}
 
-/* LIQUID GLASS CONTAINERS */
+/* LIQUID GLASS CONTAINERS DI DESKTOP */
 div[data-testid="stVerticalBlockBorderWrapper"] {{
     background: var(--secondary-background-color) !important;
     backdrop-filter: blur(12px) !important;
@@ -183,11 +173,6 @@ div[data-testid="stVerticalBlockBorderWrapper"] {{
     border: 1px solid rgba(128, 128, 128, 0.14) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-}}
-
-div[data-testid="stVerticalBlockBorderWrapper"]:hover {{
-    border-color: rgba(9, 167, 80, 0.3) !important;
-    box-shadow: 0 8px 28px rgba(9, 167, 80, 0.08) !important;
 }}
 
 div[data-testid="stVerticalBlockBorderWrapper"] > div {{
@@ -245,7 +230,7 @@ div[data-testid="stMetricLabel"] {{
     margin-bottom: 0.65rem;
 }}
 
-/* PILL BADGES SENTIMEN */
+/* PILL BADGES */
 .pill-positif {{
     background: rgba(9, 167, 80, 0.12);
     border: 1px solid rgba(9, 167, 80, 0.35);
@@ -288,7 +273,9 @@ div[data-testid="stMetricLabel"] {{
 .legend-dot.red {{ background: {RED}; }}
 .legend-count {{ color: var(--text-color); opacity: 0.65; font-weight: 500; margin-left: auto; }}
 
-/* SIDEBAR THEME */
+/* ====================================================
+   SIDEBAR DESKTOP DENGAN FROSTED GLASS
+   ==================================================== */
 section[data-testid="stSidebar"] {{
     background: var(--background-color) !important;
     border-right: 1px solid rgba(128, 128, 128, 0.15) !important;
@@ -351,7 +338,7 @@ section[data-testid="stSidebar"] div[role="radiogroup"] label[data-checked="true
     border: 1px solid rgba(9, 167, 80, 0.3);
 }}
 
-/* TOMBOL AKSI UTAMA */
+/* TOMBOL AKSI */
 div.stButton > button {{
     background: {GREEN} !important;
     color: white !important;
@@ -400,12 +387,26 @@ div[data-testid="stDataFrame"] {{
 }}
 
 /* ====================================================
-   OPTIMALISASI KHUSUS IPHONE DUO & SMARTPHONE (320px - 640px)
+   SOLUSI ANTI-TEMBUS PANDANG KHUSUS PONSEL / TABLET (<= 768px)
    ==================================================== */
-@media (max-width: 640px) {{
+@media (max-width: 768px) {{
+    /* SIDEBAR DIBUAT 100% SOLID OPAQUE DI HP */
+    section[data-testid="stSidebar"] {{
+        background-color: var(--background-color) !important;
+        opacity: 1 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: 4px 0 30px rgba(0, 0, 0, 0.45) !important;
+        z-index: 9999 !important;
+    }}
+
+    section[data-testid="stSidebar"] > div {{
+        background-color: var(--background-color) !important;
+    }}
+    
     .block-container {{
-        padding-left: 12px !important;
-        padding-right: 12px !important;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
     }}
     
     .app-header {{
@@ -419,15 +420,6 @@ div[data-testid="stDataFrame"] {{
         align-self: flex-start;
     }}
     
-    /* Tombol collapse di layar kecil dibuat pas di pojok kiri atas */
-    button[data-testid="stSidebarCollapseButton"],
-    [data-testid="collapsedControl"] button {{
-        min-width: 38px !important;
-        min-height: 38px !important;
-        margin-left: 2px !important;
-    }}
-    
-    /* Layout kolom download button agar full width di HP */
     [data-testid="column"] {{
         width: 100% !important;
         flex: 1 1 100% !important;
@@ -436,6 +428,42 @@ div[data-testid="stDataFrame"] {{
     }}
 }}
 </style>
+
+<!-- JAVASCRIPT: AUTO-CLOSE SIDEBAR DRAWER ON MOBILE CLICK -->
+<script>
+function attachAutoClose() {{
+    const sidebar = window.parent.document.querySelector('section[data-testid="stSidebar"]');
+    if (!sidebar) return;
+
+    // Cari semua opsi radio button di sidebar
+    const radioLabels = sidebar.querySelectorAll('div[role="radiogroup"] label');
+    radioLabels.forEach(label => {{
+        if (label.dataset.hasListener) return;
+        label.dataset.hasListener = "true";
+
+        label.addEventListener('click', () => {{
+            // Jalankan hanya saat layar HP/Tablet (overlay mode)
+            if (window.parent.innerWidth <= 768) {{
+                setTimeout(() => {{
+                    // Cari tombol penutup sidebar Streamlit
+                    const closeBtn = sidebar.querySelector('button[data-testid="stSidebarCollapseButton"]') || 
+                                     window.parent.document.querySelector('button[data-testid="stSidebarCollapseButton"]');
+                    if (closeBtn) {{
+                        closeBtn.click();
+                    }}
+                }}, 150);
+            }}
+        }});
+    }});
+}}
+
+// Jalankan saat pertama kali render dan pantau perubahan DOM
+setTimeout(attachAutoClose, 500);
+const observer = new MutationObserver(attachAutoClose);
+if (window.parent.document.body) {{
+    observer.observe(window.parent.document.body, {{ childList: true, subtree: true }});
+}}
+</script>
 """, unsafe_allow_html=True)
 
 MPL_PALETTE = {"Positif": GREEN, "Negatif": RED}
@@ -459,7 +487,6 @@ def format_bulan_pendek(period):
 def format_bulan_panjang(period):
     return f"{BULAN_ID_PANJANG[period.month]} {period.year}"
 
-# MATPLOTLIB UNIVERSAL THEME (ADAPTIVE ACCORDING TO STREAMLIT THEME)
 def set_mpl_style():
     plt.rcParams.update({
         "font.family": "sans-serif",
