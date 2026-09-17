@@ -735,7 +735,7 @@ if halaman == "Halaman Utama":
         st.markdown(
             f"""<div class="kpi-label">Total Ulasan Terkumpul</div>
             <div class="kpi-value">{total_ulasan:,}</div>
-            <div class="kpi-sub neutral">Rentang waktu {n_bulan} bulan</div>""".replace(",", "."),
+            <div class="kpi-sub neutral">Sepanjang {n_bulan} bulan</div>""".replace(",", "."),
             unsafe_allow_html=True,
         )
     with k2, st.container(border=True):
@@ -753,11 +753,11 @@ if halaman == "Halaman Utama":
             unsafe_allow_html=True,
         )
 
-    eyebrow("Dinamika & Proporsi Sentimen")
+    eyebrow("Sebaran Sentimen")
     col_tren, col_donut = st.columns([2, 1])
 
     with col_tren, st.container(border=True):
-        st.markdown('<div class="card-title">Tren Fluktuasi Bulanan</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-title">Tren Bulanan</div>', unsafe_allow_html=True)
         if n_bulan > 0:
             x_labels = [format_bulan_pendek(p) for p in tren.index]
             fig_tren, ax_tren = plt.subplots(figsize=(8, 3.8))
@@ -780,7 +780,7 @@ if halaman == "Halaman Utama":
             st.caption("Data tanggal belum tersedia.")
 
     with col_donut, st.container(border=True):
-        st.markdown('<div class="card-title">Rasio Komposisi</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-title">Komposisi Sentimen</div>', unsafe_allow_html=True)
         fig_donut, ax_donut = plt.subplots(figsize=(3.6, 3.6))
         ax_donut.pie(
             [total_positif, total_negatif],
@@ -805,7 +805,7 @@ if halaman == "Halaman Utama":
             unsafe_allow_html=True,
         )
 
-    eyebrow("Ringkasan Performa Model Testing")
+    eyebrow("Performa Model pada Data Uji")
     m1, m2, m3, m4 = st.columns(4)
     metrik_home = [
         ("Akurasi", eval_hasil['akurasi']),
@@ -819,7 +819,7 @@ if halaman == "Halaman Utama":
 
 # HALAMAN 2 — VISUALISASI DATASET
 elif halaman == "Visualisasi Dataset":
-    header("Dataset Analytics", subtitle=subtitle_filtered)
+    header("Statistik Dataset", subtitle=subtitle_filtered)
     df_view = df_filtered
 
     col1, col2 = st.columns(2)
@@ -869,7 +869,7 @@ elif halaman == "Visualisasi Dataset":
         st.pyplot(fig_rating, use_container_width=True)
 
     with st.container(border=True):
-        eyebrow("Proporsi Pembagian Data (Train vs Test)")
+        eyebrow("Pembagian Data Latih dan Data Uji")
         n_train = eval_hasil['n_train']
         n_test = eval_hasil['n_test']
         total = n_train + n_test
@@ -901,7 +901,7 @@ elif halaman == "Visualisasi TF-IDF Bigram":
     top_pos, top_neg = hitung_top_bigram(df_filtered)
     col1, col2 = st.columns(2)
     with col1, st.container(border=True):
-        eyebrow("Top 20 Bigram — Sentimen Positif")
+        eyebrow("20 Bigram Teratas — Sentimen Positif")
         bigram_pos, skor_pos = zip(*top_pos)
         fig3, ax3 = plt.subplots(figsize=(6, 7))
         ax3.barh(bigram_pos[::-1], skor_pos[::-1], color=GREEN)
@@ -911,7 +911,7 @@ elif halaman == "Visualisasi TF-IDF Bigram":
         st.pyplot(fig3, use_container_width=True)
 
     with col2, st.container(border=True):
-        eyebrow("Top 20 Bigram — Sentimen Negatif")
+        eyebrow("20 Bigram Teratas — Sentimen Negatif")
         bigram_neg, skor_neg = zip(*top_neg)
         fig4, ax4 = plt.subplots(figsize=(6, 7))
         ax4.barh(bigram_neg[::-1], skor_neg[::-1], color=RED)
@@ -960,7 +960,7 @@ elif halaman == "Visualisasi TF-IDF Bigram":
             ax9.grid(axis="x", color="#88888822", linewidth=1)
             ax9.set_axisbelow(True)
             st.pyplot(fig9, use_container_width=True)
-            st.caption("Pengelompokan kata berbasis kamus topik kendala pengguna.")
+            st.caption("Dikelompokkan memakai kamus kata kunci per kategori.")
 
     with st.container(border=True):
         eyebrow("Eksplorasi Kata Kunci Bigram")
@@ -976,7 +976,7 @@ elif halaman == "Visualisasi TF-IDF Bigram":
 
 # HALAMAN 4 — EVALUASI MODEL
 elif halaman == "Evaluasi Model":
-    header("Evaluasi & Validasi Model")
+    header("Evaluasi & Model")
 
     col1, col2 = st.columns(2)
     with col1, st.container(border=True):
@@ -1004,7 +1004,7 @@ elif halaman == "Evaluasi Model":
 
     col_roc, col_feat = st.columns(2)
     with col_roc, st.container(border=True):
-        eyebrow("Kurva Karakteristik Operasi (ROC-AUC)")
+        eyebrow("Kurva ROC")
         fig_roc, ax_roc = plt.subplots(figsize=(5, 4.2))
         ax_roc.plot(eval_hasil['fpr'], eval_hasil['tpr'], color=GREEN, linewidth=2.4,
                     label=f"AUC = {eval_hasil['roc_auc']:.3f}")
@@ -1017,7 +1017,7 @@ elif halaman == "Evaluasi Model":
         st.pyplot(fig_roc, use_container_width=True)
 
     with col_feat, st.container(border=True):
-        eyebrow("Pengaruh Fitur (Log-Probability Delta)")
+        eyebrow("Kata Paling Berpengaruh (Selisih Log-Probability)")
         classes_list = list(model.classes_)
         idx_pos = classes_list.index('Positif')
         idx_neg = classes_list.index('Negatif')
@@ -1038,7 +1038,7 @@ elif halaman == "Evaluasi Model":
         ax_feat.set_axisbelow(True)
         st.pyplot(fig_feat, use_container_width=True)
 
-    eyebrow("Metrik Komprehensif — Data Training")
+    eyebrow("Metrik — Data Latih")
     c7, c8, c9, c10 = st.columns(4)
     with c7, st.container(border=True):
         st.metric("Akurasi", f"{eval_hasil['akurasi_train']*100:.2f}%")
@@ -1049,7 +1049,7 @@ elif halaman == "Evaluasi Model":
     with c10, st.container(border=True):
         st.metric("F1-Score", f"{eval_hasil['f1_train']*100:.2f}%")    
 
-    eyebrow("Metrik Komprehensif — Data Testing")
+    eyebrow("Metrik Komprehensif — Data Uji")
     c3, c4, c5, c6 = st.columns(4)
     with c3, st.container(border=True):
         st.metric("Akurasi", f"{eval_hasil['akurasi']*100:.2f}%")
@@ -1062,7 +1062,7 @@ elif halaman == "Evaluasi Model":
 
 # HALAMAN 5 — PREDIKSI SENTIMEN
 elif halaman == "Prediksi Sentimen":
-    header("Prediksi & Pelabelan Otomatis", subtitle="Unggah dataset ulasan baru berformat XLSX untuk inferensi langsung")
+    header("Prediksi & Pelabelan Otomatis", subtitle="Unggah dataset ulasan baru berformat XLSX diklasifikasikan oleh model")
 
     if 'df_hasil_prediksi' not in st.session_state:
         st.session_state.df_hasil_prediksi = None
@@ -1269,7 +1269,7 @@ elif halaman == "Prediksi Sentimen":
                     "F1-Score": f"{f1_baru*100:.2f}%",
                 })
 
-            eyebrow("Metrik Inferensi Data Baru")
+            eyebrow("Metrik pada Data Baru")
             c1, c2, c3, c4 = st.columns(4)
             with c1, st.container(border=True):
                 st.metric("Akurasi", f"{akurasi_baru*100:.2f}%")
@@ -1290,7 +1290,7 @@ elif halaman == "Prediksi Sentimen":
             c1_dist.markdown(f'<div class="pill-positif">Positif: {n_positif:,} ({pct_pos:.1f}%)</div>', unsafe_allow_html=True)
             c2_dist.markdown(f'<div class="pill-negatif">Negatif: {n_negatif:,} ({pct_neg:.1f}%)</div>', unsafe_allow_html=True)
 
-            with st.expander("Pratinjau Dataframe Hasil"):
+            with st.expander("Pratinjau Hasil"):
                 preview_df = df_final[["ulasan", "Prediksi_ML"]].head(10).rename(columns={"ulasan": "Ulasan", "Prediksi_ML": "Prediksi"})
                 st.dataframe(preview_df, use_container_width=True, hide_index=True)
 
@@ -1302,7 +1302,7 @@ elif halaman == "Prediksi Sentimen":
             freq_pos = get_bigram_freq(df_final.loc[df_final["Prediksi_ML"] == "Positif", "teks_bersih"])
             freq_neg = get_bigram_freq(df_final.loc[df_final["Prediksi_ML"] == "Negatif", "teks_bersih"])
             with c5, st.container(border=True):
-                eyebrow("Word Cloud Baru — Positif")
+                eyebrow("Word Cloud — Positif")
                 if freq_pos:
                     wc_pos = WordCloud(
                         width=500, height=300, background_color=None, mode="RGBA", colormap='Greens'
@@ -1314,7 +1314,7 @@ elif halaman == "Prediksi Sentimen":
                 else:
                     st.caption("Data tidak cukup.")
             with c6, st.container(border=True):
-                eyebrow("Word Cloud Baru — Negatif")
+                eyebrow("Word Cloud — Negatif")
                 if freq_neg:
                     wc_neg = WordCloud(
                         width=500, height=300, background_color=None, mode="RGBA", colormap='Reds'
@@ -1340,13 +1340,13 @@ elif halaman == "Prediksi Sentimen":
             col_left, col_mid, col_right = st.columns([3, 1, 1])
             with col_mid:
                 st.download_button(
-                    label="Unduh PDF Laporan", data=pdf_bytes,
+                    label="Unduh Laporan PDF", data=pdf_bytes,
                     file_name="laporan_prediksi.pdf", mime="application/pdf",
                     use_container_width=True
                 )
             with col_right:
                 st.download_button(
-                    label="Unduh Excel Prediksi", data=buffer.getvalue(),
+                    label="Unduh Hasil Prediksi", data=buffer.getvalue(),
                     file_name="hasil_prediksi_baru.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     use_container_width=True
