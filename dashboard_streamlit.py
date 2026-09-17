@@ -1049,7 +1049,7 @@ elif halaman == "Evaluasi Model":
     with c10, st.container(border=True):
         st.metric("F1-Score", f"{eval_hasil['f1_train']*100:.2f}%")    
 
-    eyebrow("Metrik Komprehensif — Data Uji")
+    eyebrow("Metrik — Data Uji")
     c3, c4, c5, c6 = st.columns(4)
     with c3, st.container(border=True):
         st.metric("Akurasi", f"{eval_hasil['akurasi']*100:.2f}%")
